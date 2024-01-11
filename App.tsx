@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     fontSize: 32,
     color: '#fff'
   }
