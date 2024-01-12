@@ -9,16 +9,18 @@ interface Props {
     size?: number;
     font?: string;
     color?: string;
+    flex?: number
 }
 
 const TextComponent = (props: Props) => {
-    const { text, size, font, color } = props
+    const { text, size, font, color, flex } = props
     return (
         <Text style={[globalStyles.text,
         {
             fontFamily: font ?? fontFamilies.regular,
             fontSize: size ?? 14,
-            color: color ?? colors.text
+            color: color ?? colors.desc,
+            flex: flex ?? 1
         }
 
         ]}>{text}</Text>

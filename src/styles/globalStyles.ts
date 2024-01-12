@@ -20,6 +20,14 @@ export const globalStyles = StyleSheet.create({
         marginBottom: 16,
     },
 
+    inputContainer: {
+        backgroundColor: colors.gray,
+        borderRadius: 12,
+        paddingHorizontal: Platform.OS === "ios" ? 12 : 10,
+        paddingVertical: Platform.OS === "ios" ? 12 : 10
+
+    },
+
     text: {
         fontSize: 14,
         fontFamily: fontFamilies.regular,
