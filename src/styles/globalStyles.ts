@@ -16,6 +16,10 @@ export const globalStyles = StyleSheet.create({
         alignItems: 'center'
     },
 
+    section: {
+        marginBottom: 16,
+    },
+
     text: {
         fontSize: 14,
         fontFamily: fontFamilies.regular,
