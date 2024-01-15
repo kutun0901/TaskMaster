@@ -12,6 +12,7 @@ import { Element4, Notification, SearchNormal1 } from 'iconsax-react-native'
 import { colors } from '../constants/colors'
 import TagComponent from '../components/TagComponent'
 import SpaceComponent from '../components/SpaceComponent'
+import CircularComponent from '../components/CircularComponent'
 // import IonIcons from 'react-native-vector-icons/Ionicons'
 
 const HomeScreen = () => {
@@ -43,11 +44,11 @@ const HomeScreen = () => {
               <TextComponent text='20/40 tasks done'/>
               <SpaceComponent height={7}/>
               <RowComponent justify='flex-start'>
-              <TagComponent text='fafa' />
+              <TagComponent text='March 12' onPress={() => console.log("hiii")}/>
               </RowComponent>
             </View>
             <View>
-              <TextComponent text='Circle' />
+              <CircularComponent value={20} />
             </View>
           </RowComponent>
         </CardComponent>

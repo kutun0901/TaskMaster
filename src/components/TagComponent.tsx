@@ -16,7 +16,7 @@ const TagComponent = (props: Props) => {
 
     const { text, textStyle, color, tagStyle, onPress } = props
     return (
-        <TouchableOpacity style={[globalStyles.tag, tagStyle, {backgroudColor: color ?? colors.blue} ]}>
+        <TouchableOpacity disabled={!onPress} style={[globalStyles.tag, tagStyle, {backgroudColor: color ?? colors.blue} ]}>
             <TextComponent text={text} styles={textStyle} />
         </TouchableOpacity>
     )
