@@ -8,7 +8,7 @@ import SectionComponent from '../components/SectionComponent'
 import { fontFamilies } from '../constants/fontFamilies'
 import TitleComponent from '../components/TitleComponent'
 import CardComponent from '../components/CardComponent'
-import { Card, Element4, Notification, SearchNormal1 } from 'iconsax-react-native'
+import { Card, Edit2, Element4, Notification, SearchNormal1 } from 'iconsax-react-native'
 import { colors } from '../constants/colors'
 import TagComponent from '../components/TagComponent'
 import SpaceComponent from '../components/SpaceComponent'
@@ -55,19 +55,33 @@ const HomeScreen = () => {
         </CardComponent>
       </SectionComponent>
       <SectionComponent>
-        <RowComponent>
+        <RowComponent styles={{ alignItems: 'flex-start' }}>
           <View style={{ flex: 1 }}>
             <CardImage>
-            <TextComponent text='helo' />
+              <TouchableOpacity onPress={() => { }} style={globalStyles.iconContainer}>
+                <Edit2 size={20} color={colors.white} />
+              </TouchableOpacity>
+              <TitleComponent text='UX Design' />
+              <TextComponent text='Task management mobile app' size={13} />
             </CardImage>
           </View>
           <SpaceComponent width={16} />
-          <View style={{ flex: 1, backgroundColor:'coral' }}>
-          <CardImage>
-            <TextComponent text='helo' />
+          <View style={{ flex: 1 }}>
+
+            <CardImage color='rgba(33, 150, 243, 0.9)'>
+              <TouchableOpacity onPress={() => { }} style={globalStyles.iconContainer}>
+                <Edit2 size={20} color={colors.white} />
+              </TouchableOpacity>
+              <TitleComponent text='API payment' size={18}/>
+              <TextComponent  text=''/>
             </CardImage>
-            <CardImage>
-            <TextComponent text='helo' />
+            <SpaceComponent height={16} />
+            <CardImage color='rgba(18, 181, 22, 0.9)'>
+              <TouchableOpacity onPress={() => { }} style={globalStyles.iconContainer}>
+                <Edit2 size={20} color={colors.white} />
+              </TouchableOpacity>
+              <TitleComponent text='Update work' />
+              <TextComponent  text='Revision homepage' size={13}/>
             </CardImage>
           </View>
         </RowComponent>
