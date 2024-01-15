@@ -7,7 +7,7 @@ export const globalStyles = StyleSheet.create({
         flex: 1,
         backgroundColor: colors.bgColor,
         padding: 20,
-        paddingTop: Platform.OS === 'ios' ? 42 : 32
+        paddingTop: Platform.OS === 'ios' ? 52 : 42
     },
 
     row: {

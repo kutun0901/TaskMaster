@@ -8,14 +8,19 @@ import SectionComponent from '../components/SectionComponent'
 import { fontFamilies } from '../constants/fontFamilies'
 import TitleComponent from '../components/TitleComponent'
 import CardComponent from '../components/CardComponent'
+import { Element4, Notification } from 'iconsax-react-native'
+import { colors } from '../constants/colors'
+// import IonIcons from 'react-native-vector-icons/Ionicons'
 
 const HomeScreen = () => {
   return (
     <Container>
       <SectionComponent>
         <RowComponent justify='space-between'>
-          <TextComponent text='Hello'/>
-          <TextComponent text='Hi' />
+          <Element4 size={24} color={colors.desc}/ >
+          <Notification size={24} color={colors.desc} />
+
+          {/* <IonIcons name='notifications' size={24} color={colors.desc}/> */}
         </RowComponent>
       </SectionComponent>
       <SectionComponent>

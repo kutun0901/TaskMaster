@@ -5,7 +5,7 @@ import { globalStyles } from '../styles/globalStyles';
 interface Props {
     children: ReactNode;
     bgColor?: string;
-    styles: StyleProp<ViewStyle>
+    styles?: StyleProp<ViewStyle>
 
 }
 
