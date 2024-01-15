@@ -40,5 +40,9 @@ export const globalStyles = StyleSheet.create({
         fontSize: 14,
         fontFamily: fontFamilies.regular,
         color: colors.text
+    },
+
+    card: {
+        borderRadius: 12
     }
 })
