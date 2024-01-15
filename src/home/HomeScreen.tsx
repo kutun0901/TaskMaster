@@ -14,6 +14,7 @@ import TagComponent from '../components/TagComponent'
 import SpaceComponent from '../components/SpaceComponent'
 import CircularComponent from '../components/CircularComponent'
 import CardImage from '../components/CardImage'
+import AvatarGroup from '../components/AvatarGroup'
 // import IonIcons from 'react-native-vector-icons/Ionicons'
 
 const HomeScreen = () => {
@@ -63,6 +64,10 @@ const HomeScreen = () => {
               </TouchableOpacity>
               <TitleComponent text='UX Design' />
               <TextComponent text='Task management mobile app' size={13} />
+              <View style={{marginVertical: 28}}>
+                <AvatarGroup />
+              </View>
+              <TextComponent text='Due 2023 March 22' size={12} color={colors.desc}/>
             </CardImage>
           </View>
           <SpaceComponent width={16} />
@@ -74,6 +79,7 @@ const HomeScreen = () => {
               </TouchableOpacity>
               <TitleComponent text='API payment' size={18}/>
               <TextComponent  text=''/>
+              <AvatarGroup />
             </CardImage>
             <SpaceComponent height={16} />
             <CardImage color='rgba(18, 181, 22, 0.9)'>
