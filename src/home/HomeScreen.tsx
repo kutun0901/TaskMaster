@@ -8,8 +8,10 @@ import SectionComponent from '../components/SectionComponent'
 import { fontFamilies } from '../constants/fontFamilies'
 import TitleComponent from '../components/TitleComponent'
 import CardComponent from '../components/CardComponent'
-import { Element4, Notification } from 'iconsax-react-native'
+import { Element4, Notification, SearchNormal1 } from 'iconsax-react-native'
 import { colors } from '../constants/colors'
+import TagComponent from '../components/TagComponent'
+import SpaceComponent from '../components/SpaceComponent'
 // import IonIcons from 'react-native-vector-icons/Ionicons'
 
 const HomeScreen = () => {
@@ -29,7 +31,8 @@ const HomeScreen = () => {
       </SectionComponent>
       <SectionComponent>
         <RowComponent styles={[globalStyles.inputContainer]} onPress={() => console.log("hiiii")}>
-          <TextComponent text='Search'/>
+          <TextComponent color='#696B6F' text='Search Task'/>
+          <SearchNormal1 size={20} color={colors.desc} />
         </RowComponent>
       </SectionComponent>
       <SectionComponent>
@@ -38,7 +41,10 @@ const HomeScreen = () => {
             <View style={{flex: 1}}>
               <TitleComponent text='Task Progress' />
               <TextComponent text='20/40 tasks done'/>
-              <TextComponent text='tag' />
+              <SpaceComponent height={7}/>
+              <RowComponent justify='flex-start'>
+              <TagComponent text='fafa' />
+              </RowComponent>
             </View>
             <View>
               <TextComponent text='Circle' />

@@ -1,6 +1,7 @@
 import { Platform, StyleSheet } from "react-native";
 import {colors} from "../constants/colors"
 import { fontFamilies } from "../constants/fontFamilies";
+import { ColorSwatch } from "iconsax-react-native";
 
 export const globalStyles = StyleSheet.create({
     container: {
@@ -18,6 +19,13 @@ export const globalStyles = StyleSheet.create({
 
     section: {
         marginBottom: 16,
+    },
+
+    tag: {
+        borderRadius: 100,
+        paddingHorizontal: 20,
+        paddingVertical: Platform.OS === "ios" ? 6 : 4,
+        backgroundColor: colors.blue,
     },
 
     inputContainer: {
