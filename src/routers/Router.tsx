@@ -3,6 +3,7 @@ import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import HomeScreen from '../home/HomeScreen';
 import AddNewTask from '../tasks/AddNewTask';
+import SearchScreen from '../SearchScreen';
 
 const Router = () => {
 
@@ -15,6 +16,7 @@ const Router = () => {
         {/* The first page when open an app has to be on the top */}
        <Stack.Screen name='HomeScreen' component={HomeScreen}/>
        <Stack.Screen name='AddNewTask' component={AddNewTask}/>
+       <Stack.Screen name='SearchScreen' component={SearchScreen}/>
     </Stack.Navigator>
   )
 }

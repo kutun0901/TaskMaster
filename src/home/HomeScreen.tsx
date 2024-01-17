@@ -36,7 +36,7 @@ const HomeScreen = ({navigation}: any) => {
           <TitleComponent text='Be productive today' />
         </SectionComponent>
         <SectionComponent>
-          <RowComponent styles={[globalStyles.inputContainer]} onPress={() => console.log("hiiii")}>
+          <RowComponent styles={[globalStyles.inputContainer]} onPress={() => navigation.navigate('SearchScreen')}>
             <TextComponent color='#696B6F' text='Search Task' />
             <SearchNormal1 size={20} color={colors.desc} />
           </RowComponent>
