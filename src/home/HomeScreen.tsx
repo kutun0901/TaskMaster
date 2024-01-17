@@ -8,17 +8,20 @@ import SectionComponent from '../components/SectionComponent'
 import { fontFamilies } from '../constants/fontFamilies'
 import TitleComponent from '../components/TitleComponent'
 import CardComponent from '../components/CardComponent'
-import { Card, Edit2, Element4, Notification, SearchNormal1 } from 'iconsax-react-native'
+import { Add, Card, Edit2, Element4, Notification, SearchNormal1 } from 'iconsax-react-native'
 import { colors } from '../constants/colors'
 import TagComponent from '../components/TagComponent'
 import SpaceComponent from '../components/SpaceComponent'
 import CircularComponent from '../components/CircularComponent'
 import CardImage from '../components/CardImage'
 import AvatarGroup from '../components/AvatarGroup'
+import ProgressBarComponent from '../components/ProgressBarComponent'
 // import IonIcons from 'react-native-vector-icons/Ionicons'
 
 const HomeScreen = () => {
   return (
+    <View style={{flex: 1}}>
+
     <Container>
       <SectionComponent>
         <RowComponent justify='space-between'>
@@ -29,7 +32,7 @@ const HomeScreen = () => {
         </RowComponent>
       </SectionComponent>
       <SectionComponent>
-        <TextComponent text='Hi, Jason' />
+        <TextComponent text='Hi, Tuan' />
         <TitleComponent text='Be productive today' />
       </SectionComponent>
       <SectionComponent>
@@ -64,10 +67,11 @@ const HomeScreen = () => {
               </TouchableOpacity>
               <TitleComponent text='UX Design' />
               <TextComponent text='Task management mobile app' size={13} />
-              <View style={{marginVertical: 28}}>
+              <View style={{ marginVertical: 28 }}>
                 <AvatarGroup />
+                <ProgressBarComponent percent="70%" color='#0AACFF' size='large' />
               </View>
-              <TextComponent text='Due 2023 March 22' size={12} color={colors.desc}/>
+              <TextComponent text='Due 2023 March 22' size={12} color={colors.desc} />
             </CardImage>
           </View>
           <SpaceComponent width={16} />
@@ -77,9 +81,11 @@ const HomeScreen = () => {
               <TouchableOpacity onPress={() => { }} style={globalStyles.iconContainer}>
                 <Edit2 size={20} color={colors.white} />
               </TouchableOpacity>
-              <TitleComponent text='API payment' size={18}/>
-              <TextComponent  text=''/>
+              <TitleComponent text='API payment' size={18} />
+              <TextComponent text='' />
               <AvatarGroup />
+              <ProgressBarComponent percent="40%" color='#A2F068' />
+
             </CardImage>
             <SpaceComponent height={16} />
             <CardImage color='rgba(18, 181, 22, 0.9)'>
@@ -87,12 +93,42 @@ const HomeScreen = () => {
                 <Edit2 size={20} color={colors.white} />
               </TouchableOpacity>
               <TitleComponent text='Update work' />
-              <TextComponent  text='Revision homepage' size={13}/>
+              <TextComponent text='Revision homepage' size={13} />
             </CardImage>
           </View>
         </RowComponent>
       </SectionComponent>
+      <SpaceComponent height={16} />
+      <SectionComponent>
+        <TitleComponent text='Urgent tasks' />
+        <CardComponent>
+          <RowComponent>
+            <CircularComponent value={40} radius={40} />
+            <View style={{
+              flex: 1,
+              justifyContent: 'center',
+              paddingLeft: 16,
+            }}>
+              <TextComponent text='Report UI/UX' />
+            </View>
+          </RowComponent>
+        </CardComponent>
+      </SectionComponent>
     </Container>
+    <View style={{
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
+        left: 0,
+        padding: 20
+
+      }}>
+        <TouchableOpacity style={[globalStyles.row, {backgroundColor: colors.blue}]}>
+          <TextComponent text='Add new task' flex={0} />
+          <Add size={22} color={colors.white}/>
+        </TouchableOpacity>
+      </View>
+    </View>
   )
 }
 
