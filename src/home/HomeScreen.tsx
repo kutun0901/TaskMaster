@@ -18,7 +18,7 @@ import AvatarGroup from '../components/AvatarGroup'
 import ProgressBarComponent from '../components/ProgressBarComponent'
 // import IonIcons from 'react-native-vector-icons/Ionicons'
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}: any) => {
   return (
     <View style={{ flex: 1 }}>
 
@@ -126,10 +126,12 @@ const HomeScreen = () => {
       }}>
         <TouchableOpacity
         activeOpacity={1}
+        onPress={() => navigation.navigate('AddNewTask')}
         style={[globalStyles.row, {
-          backgroundColor: 'coral',
+          backgroundColor: colors.blue,
           padding: 10,
-          borderRadius: 100,
+          borderRadius: 12,
+          paddingVertical: 14,
           width: '80%',
 
         }]}>

@@ -12,6 +12,7 @@ const Router = () => {
     screenOptions={{
         headerShown: false
     }}>
+        {/* The first page when open an app has to be on the top */}
        <Stack.Screen name='HomeScreen' component={HomeScreen}/>
        <Stack.Screen name='AddNewTask' component={AddNewTask}/>
     </Stack.Navigator>
