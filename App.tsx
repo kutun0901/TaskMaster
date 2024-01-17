@@ -4,14 +4,17 @@ import HomeScreen from './src/home/HomeScreen'
 
 const App = () => {
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <StatusBar
+    <>
+      {/* <StatusBar
         translucent
         barStyle={'light-content'}
         backgroundColor='transparent'
-      />
-      <HomeScreen />
-    </SafeAreaView>
+      /> */}
+      <SafeAreaView style={{ flex: 1 }}>
+        <HomeScreen />
+      </SafeAreaView>
+    </>
+
   )
 }
 

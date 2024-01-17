@@ -20,112 +20,121 @@ import ProgressBarComponent from '../components/ProgressBarComponent'
 
 const HomeScreen = () => {
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
 
-    <Container>
-      <SectionComponent>
-        <RowComponent justify='space-between'>
-          <Element4 size={24} color={colors.desc} />
-          <Notification size={24} color={colors.desc} />
+      <Container>
+        <SectionComponent>
+          <RowComponent justify='space-between'>
+            <Element4 size={24} color={colors.desc} />
+            <Notification size={24} color={colors.desc} />
 
-          {/* <IonIcons name='notifications' size={24} color={colors.desc}/> */}
-        </RowComponent>
-      </SectionComponent>
-      <SectionComponent>
-        <TextComponent text='Hi, Tuan' />
-        <TitleComponent text='Be productive today' />
-      </SectionComponent>
-      <SectionComponent>
-        <RowComponent styles={[globalStyles.inputContainer]} onPress={() => console.log("hiiii")}>
-          <TextComponent color='#696B6F' text='Search Task' />
-          <SearchNormal1 size={20} color={colors.desc} />
-        </RowComponent>
-      </SectionComponent>
-      <SectionComponent>
-        <CardComponent>
-          <RowComponent>
-            <View style={{ flex: 1 }}>
-              <TitleComponent text='Task Progress' />
-              <TextComponent text='20/40 tasks done' />
-              <SpaceComponent height={7} />
-              <RowComponent justify='flex-start'>
-                <TagComponent text='March 12' onPress={() => console.log("hiii")} />
-              </RowComponent>
-            </View>
-            <View>
-              <CircularComponent value={20} />
-            </View>
+            {/* <IonIcons name='notifications' size={24} color={colors.desc}/> */}
           </RowComponent>
-        </CardComponent>
-      </SectionComponent>
-      <SectionComponent>
-        <RowComponent styles={{ alignItems: 'flex-start' }}>
-          <View style={{ flex: 1 }}>
-            <CardImage>
-              <TouchableOpacity onPress={() => { }} style={globalStyles.iconContainer}>
-                <Edit2 size={20} color={colors.white} />
-              </TouchableOpacity>
-              <TitleComponent text='UX Design' />
-              <TextComponent text='Task management mobile app' size={13} />
-              <View style={{ marginVertical: 28 }}>
-                <AvatarGroup />
-                <ProgressBarComponent percent="70%" color='#0AACFF' size='large' />
+        </SectionComponent>
+        <SectionComponent>
+          <TextComponent text='Hi, Tuan' />
+          <TitleComponent text='Be productive today' />
+        </SectionComponent>
+        <SectionComponent>
+          <RowComponent styles={[globalStyles.inputContainer]} onPress={() => console.log("hiiii")}>
+            <TextComponent color='#696B6F' text='Search Task' />
+            <SearchNormal1 size={20} color={colors.desc} />
+          </RowComponent>
+        </SectionComponent>
+        <SectionComponent>
+          <CardComponent>
+            <RowComponent>
+              <View style={{ flex: 1 }}>
+                <TitleComponent text='Task Progress' />
+                <TextComponent text='20/40 tasks done' />
+                <SpaceComponent height={7} />
+                <RowComponent justify='flex-start'>
+                  <TagComponent text='March 12' onPress={() => console.log("hiii")} />
+                </RowComponent>
               </View>
-              <TextComponent text='Due 2023 March 22' size={12} color={colors.desc} />
-            </CardImage>
-          </View>
-          <SpaceComponent width={16} />
-          <View style={{ flex: 1 }}>
+              <View>
+                <CircularComponent value={20} />
+              </View>
+            </RowComponent>
+          </CardComponent>
+        </SectionComponent>
+        <SectionComponent>
+          <RowComponent styles={{ alignItems: 'flex-start' }}>
+            <View style={{ flex: 1 }}>
+              <CardImage>
+                <TouchableOpacity onPress={() => { }} style={globalStyles.iconContainer}>
+                  <Edit2 size={20} color={colors.white} />
+                </TouchableOpacity>
+                <TitleComponent text='UX Design' />
+                <TextComponent text='Task management mobile app' size={13} />
+                <View style={{ marginVertical: 28 }}>
+                  <AvatarGroup />
+                  <ProgressBarComponent percent="70%" color='#0AACFF' size='large' />
+                </View>
+                <TextComponent text='Due 2023 March 22' size={12} color={colors.desc} />
+              </CardImage>
+            </View>
+            <SpaceComponent width={16} />
+            <View style={{ flex: 1 }}>
 
-            <CardImage color='rgba(33, 150, 243, 0.9)'>
-              <TouchableOpacity onPress={() => { }} style={globalStyles.iconContainer}>
-                <Edit2 size={20} color={colors.white} />
-              </TouchableOpacity>
-              <TitleComponent text='API payment' size={18} />
-              <TextComponent text='' />
-              <AvatarGroup />
-              <ProgressBarComponent percent="40%" color='#A2F068' />
+              <CardImage color='rgba(33, 150, 243, 0.9)'>
+                <TouchableOpacity onPress={() => { }} style={globalStyles.iconContainer}>
+                  <Edit2 size={20} color={colors.white} />
+                </TouchableOpacity>
+                <TitleComponent text='API payment' size={18} />
+                <TextComponent text='' />
+                <AvatarGroup />
+                <ProgressBarComponent percent="40%" color='#A2F068' />
 
-            </CardImage>
-            <SpaceComponent height={16} />
-            <CardImage color='rgba(18, 181, 22, 0.9)'>
-              <TouchableOpacity onPress={() => { }} style={globalStyles.iconContainer}>
-                <Edit2 size={20} color={colors.white} />
-              </TouchableOpacity>
-              <TitleComponent text='Update work' />
-              <TextComponent text='Revision homepage' size={13} />
-            </CardImage>
-          </View>
-        </RowComponent>
-      </SectionComponent>
-      <SpaceComponent height={16} />
-      <SectionComponent>
-        <TitleComponent text='Urgent tasks' />
-        <CardComponent>
-          <RowComponent>
-            <CircularComponent value={40} radius={40} />
-            <View style={{
-              flex: 1,
-              justifyContent: 'center',
-              paddingLeft: 16,
-            }}>
-              <TextComponent text='Report UI/UX' />
+              </CardImage>
+              <SpaceComponent height={16} />
+              <CardImage color='rgba(18, 181, 22, 0.9)'>
+                <TouchableOpacity onPress={() => { }} style={globalStyles.iconContainer}>
+                  <Edit2 size={20} color={colors.white} />
+                </TouchableOpacity>
+                <TitleComponent text='Update work' />
+                <TextComponent text='Revision homepage' size={13} />
+              </CardImage>
             </View>
           </RowComponent>
-        </CardComponent>
-      </SectionComponent>
-    </Container>
-    <View style={{
+        </SectionComponent>
+        <SpaceComponent height={16} />
+        <SectionComponent>
+          <TitleComponent text='Urgent tasks' />
+          <CardComponent>
+            <RowComponent>
+              <CircularComponent value={40} radius={40} />
+              <View style={{
+                flex: 1,
+                justifyContent: 'center',
+                paddingLeft: 16,
+              }}>
+                <TextComponent text='Report UI/UX' />
+              </View>
+            </RowComponent>
+          </CardComponent>
+        </SectionComponent>
+      </Container>
+      <View style={{
         position: 'absolute',
         bottom: 0,
         right: 0,
         left: 0,
-        padding: 20
-
+        padding: 20,
+        justifyContent: 'center',
+        alignItems: 'center'
       }}>
-        <TouchableOpacity style={[globalStyles.row, {backgroundColor: colors.blue}]}>
+        <TouchableOpacity
+        activeOpacity={1}
+        style={[globalStyles.row, {
+          backgroundColor: 'coral',
+          padding: 10,
+          borderRadius: 100,
+          width: '80%',
+
+        }]}>
           <TextComponent text='Add new task' flex={0} />
-          <Add size={22} color={colors.white}/>
+          <Add size={22} color={colors.white} />
         </TouchableOpacity>
       </View>
     </View>
