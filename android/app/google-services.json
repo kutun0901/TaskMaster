@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "550849312546",
+    "project_id": "taskmasterapp-e8a65",
+    "storage_bucket": "taskmasterapp-e8a65.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:550849312546:android:501a28bb2c12f0325e177b",
+        "android_client_info": {
+          "package_name": "com.todolist"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByoGILqG3wKRMdmWRunK3_Sy-esrBfBRA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
