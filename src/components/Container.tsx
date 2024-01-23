@@ -13,10 +13,11 @@ interface Props {
   back?: boolean;
   right?: ReactNode;
   children: ReactNode;
+  isScroll?: boolean;
 }
 
 const Container = (props: Props) => {
-  const { title, back, right, children } = props;
+  const { title, back, right, children, isScroll } = props;
 
   const navigation: any = useNavigation()
 
@@ -40,17 +41,23 @@ const Container = (props: Props) => {
         }}>
           {title && (
             <TextComponent
-            text={title}
-            flex={0}
-            font={fontFamilies.bold}
-            size={16}
-            styles={{textAlign: 'center', marginLeft: back ? -24 : 0}}
+              text={title}
+              flex={0}
+              font={fontFamilies.bold}
+              size={16}
+              styles={{ textAlign: 'center', marginLeft: back ? -24 : 0 }}
             />
           )}
         </View>
 
       </RowComponent>
-      <ScrollView style={{flex: 1}}>{children}</ScrollView>
+      {isScroll ? (
+        <ScrollView style={{ flex: 1 }}>{children}</ScrollView>
+      ) : (
+        <View style={{ flex: 1 }}>
+          {children}
+        </View>
+      )}
     </View>
   );
 };
