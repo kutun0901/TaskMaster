@@ -25,7 +25,8 @@ const LogInScreen = ({navigation}: any) => {
     <Container>
         <SectionComponent styles={{
             justifyContent: 'center',
-            alignItems: 'center',
+            // alignItems: 'center',
+            flex: 1
         }}>
             <TitleComponent text='LogIn' size={32}
             font={fontFamilies.bold}
@@ -43,13 +44,15 @@ const LogInScreen = ({navigation}: any) => {
             title="Email"
             allowClear
           />
+
           <InputComponent
             value={password}
             onChange={val => setPassword(val)}
             prefix={<Lock size={20} color={colors.desc} />}
             placeHolder="Password"
             title="Password"
-            // isPassword
+            isPassword
+            // allowClear
           />
 
 
