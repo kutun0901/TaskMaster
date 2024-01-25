@@ -8,12 +8,13 @@ import { fontFamilies } from '../../constants/fontFamilies'
 import InputComponent from '../../components/InputComponent'
 import { Lock, Sms } from 'iconsax-react-native'
 import { colors } from '../../constants/colors'
+import ButtonComponent from '../../components/ButtonComponent'
 
 const LogInScreen = ({navigation}: any) => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isloading, setLoading] = useState(false);
+    const [isLoading, setLoading] = useState(false);
     const [errorText, setErrorText] = useState('')
 
     const handleLogInWithEmail = async () => {
@@ -54,9 +55,9 @@ const LogInScreen = ({navigation}: any) => {
             isPassword
             // allowClear
           />
-
-
             </View>
+
+            <ButtonComponent isLoading={isLoading} text='login' onPress={handleLogInWithEmail}/>
 
         </SectionComponent>
     </Container>
