@@ -9,6 +9,8 @@ import InputComponent from '../../components/InputComponent'
 import { Lock, Sms } from 'iconsax-react-native'
 import { colors } from '../../constants/colors'
 import ButtonComponent from '../../components/ButtonComponent'
+import SpaceComponent from '../../components/SpaceComponent'
+import { globalStyles } from '../../styles/globalStyles'
 
 const LogInScreen = ({navigation}: any) => {
 
@@ -58,7 +60,11 @@ const LogInScreen = ({navigation}: any) => {
             </View>
 
             <ButtonComponent isLoading={isLoading} text='login' onPress={handleLogInWithEmail}/>
+            <SpaceComponent height={20}/>
 
+            <Text style={[globalStyles.text, {textAlign: 'center'}]}>
+                You don't have an account? <Text style={{color: 'coral'}}>Create an account</Text>
+            </Text>
         </SectionComponent>
     </Container>
   )
