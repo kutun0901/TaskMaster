@@ -50,6 +50,7 @@ const InputComponent = (props: Props) => {
                         multiline={multiple}
                         numberOfLines={numberOfLine}
                         secureTextEntry={isPassword ? !showPassword : false}
+                        autoCapitalize='none'
                     />
 
                 </View>

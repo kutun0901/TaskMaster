@@ -16,7 +16,9 @@ const ButtonComponent = (props: Props) => {
     const { text, onPress, isLoading, color } = props
 
     return (
-        <TouchableOpacity style={{
+        <TouchableOpacity onPress={onPress}
+        disabled={isLoading}
+        style={{
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: color ? color : isLoading ? colors.gray : colors.blue,

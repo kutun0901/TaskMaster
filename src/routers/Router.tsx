@@ -6,6 +6,7 @@ import AddNewTask from '../tasks/AddNewTask';
 import SearchScreen from '../SearchScreen';
 import auth from '@react-native-firebase/auth';
 import LogInScreen from '../screens/auth/LogInScreen';
+import SignupScreen from '../screens/auth/SignupScreen';
 
 
 
@@ -42,6 +43,7 @@ const Router = () => {
         headerShown: false
       }}>
         <Stack.Screen  name='LogInScreen' component={LogInScreen}/>
+        <Stack.Screen  name='SignupScreen' component={SignupScreen}/>
       </Stack.Navigator>
   )
 

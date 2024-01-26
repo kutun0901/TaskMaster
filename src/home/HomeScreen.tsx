@@ -8,7 +8,7 @@ import SectionComponent from '../components/SectionComponent'
 import { fontFamilies } from '../constants/fontFamilies'
 import TitleComponent from '../components/TitleComponent'
 import CardComponent from '../components/CardComponent'
-import { Add, Card, Edit2, Element4, Notification, SearchNormal1 } from 'iconsax-react-native'
+import { Add, Card, Edit2, Element4, Logout, Notification, SearchNormal1 } from 'iconsax-react-native'
 import { colors } from '../constants/colors'
 import TagComponent from '../components/TagComponent'
 import SpaceComponent from '../components/SpaceComponent'
@@ -17,12 +17,16 @@ import CardImage from '../components/CardImage'
 import AvatarGroup from '../components/AvatarGroup'
 import ProgressBarComponent from '../components/ProgressBarComponent'
 // import IonIcons from 'react-native-vector-icons/Ionicons'
+import auth from '@react-native-firebase/auth'
 
-const HomeScreen = ({navigation}: any) => {
+const HomeScreen = ({ navigation }: any) => {
+
+  const user = auth().currentUser;
+
   return (
     <View style={{ flex: 1 }}>
 
-      <Container>
+      <Container isScroll>
         <SectionComponent>
           <RowComponent justify='space-between'>
             <Element4 size={24} color={colors.desc} />
@@ -32,8 +36,16 @@ const HomeScreen = ({navigation}: any) => {
           </RowComponent>
         </SectionComponent>
         <SectionComponent>
-          <TextComponent text='Hi, Tuan' />
-          <TitleComponent text='Be productive today' />
+          <RowComponent>
+            <View style={{ flex: 1 }}>
+              <TextComponent text={`Hi, ${user?.email}`} />
+              <TitleComponent text='Be productive today' />
+            </View>
+            <TouchableOpacity onPress={async () => auth().signOut()}>
+              <Logout size={22} color='coral' />
+            </TouchableOpacity>
+          </RowComponent>
+
         </SectionComponent>
         <SectionComponent>
           <RowComponent styles={[globalStyles.inputContainer]} onPress={() => navigation.navigate('SearchScreen')}>
@@ -125,16 +137,16 @@ const HomeScreen = ({navigation}: any) => {
         alignItems: 'center'
       }}>
         <TouchableOpacity
-        activeOpacity={1}
-        onPress={() => navigation.navigate('AddNewTask')}
-        style={[globalStyles.row, {
-          backgroundColor: colors.blue,
-          padding: 10,
-          borderRadius: 12,
-          paddingVertical: 14,
-          width: '80%',
+          activeOpacity={1}
+          onPress={() => navigation.navigate('AddNewTask')}
+          style={[globalStyles.row, {
+            backgroundColor: colors.blue,
+            padding: 10,
+            borderRadius: 12,
+            paddingVertical: 14,
+            width: '80%',
 
-        }]}>
+          }]}>
           <TextComponent text='Add new task' flex={0} />
           <Add size={22} color={colors.white} />
         </TouchableOpacity>
