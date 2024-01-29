@@ -8,6 +8,7 @@ import InputComponent from '../components/InputComponent'
 import DateTimeComponent from '../components/DateTimeComponent'
 import RowComponent from '../components/RowComponent'
 import SpaceComponent from '../components/SpaceComponent'
+import DropDownPicker from '../components/DropDownPicker'
 
 const initValues: TaskModel = {
     title: '',
@@ -82,6 +83,8 @@ const AddNewTask = ({ navigation }: any) => {
                     </View>
                 </RowComponent>
             </SectionComponent>
+
+            {/* <DropDownPicker title='Members/> */}
             <SectionComponent>
                 <Button title='Save' onPress={handleAddNewTask} />
             </SectionComponent>
