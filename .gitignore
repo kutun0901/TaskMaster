@@ -21,7 +21,6 @@ DerivedData
 *.ipa
 *.xcuserstate
 ios/.xcode.env.local
-config
 
 # Android/IntelliJ
 #
@@ -40,6 +39,7 @@ local.properties
 node_modules/
 npm-debug.log
 yarn-error.log
+config
 
 # fastlane
 #
