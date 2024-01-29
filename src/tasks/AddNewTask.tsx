@@ -84,12 +84,16 @@ const AddNewTask = ({ navigation }: any) => {
                 </RowComponent>
             </SectionComponent>
 
-            {/* <DropDownPicker title='Members/> */}
+            <DropDownPicker selected={taskDetail.uids} items={[]}
+            onSelect={(val) => console.log(val) }
+            multiple
+            title='Members' />
+
             <SectionComponent>
                 <Button title='Save' onPress={handleAddNewTask} />
             </SectionComponent>
         </Container>
-    )
-}
+    );
+};
 
 export default AddNewTask
