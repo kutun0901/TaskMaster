@@ -34,7 +34,7 @@ const InputComponent = (props: Props) => {
             {
                 marginTop: title ? 8 : 0,
                 minHeight: multiple && numberOfLine ? 32 * numberOfLine : 32,
-                paddingVertical: 14,
+                paddingVertical: 22,
                 paddingHorizontal: 10,
                 alignItems: 'flex-start',
                 // flexDirection: 'row'

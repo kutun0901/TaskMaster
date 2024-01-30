@@ -115,7 +115,8 @@ const AddNewTask = ({ navigation }: any) => {
                 </RowComponent>
             </SectionComponent>
 
-            <DropDownPicker selected={taskDetail.uids} items={userSelect}
+            <DropDownPicker selected={taskDetail.uids}
+            items={userSelect}
             onSelect={(val) => console.log(val) }
             multiple
             title='Members' />
