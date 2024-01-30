@@ -1,7 +1,7 @@
 import { View, Text, Button } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Container from '../components/Container'
-import TextComponent from '../components/TextComponent'
+// import TextComponent from '../components/TextComponent'
 import { TaskModel } from '../models/TaskModel'
 import SectionComponent from '../components/SectionComponent'
 import InputComponent from '../components/InputComponent'
@@ -9,6 +9,8 @@ import DateTimeComponent from '../components/DateTimeComponent'
 import RowComponent from '../components/RowComponent'
 import SpaceComponent from '../components/SpaceComponent'
 import DropDownPicker from '../components/DropDownPicker'
+import { selectModel } from '../models/SelectModel'
+import firestore from '@react-native-firebase/firestore'
 
 const initValues: TaskModel = {
     title: '',
@@ -23,6 +25,35 @@ const initValues: TaskModel = {
 const AddNewTask = ({ navigation }: any) => {
 
     const [taskDetail, setTaskDetail] = useState<TaskModel>(initValues)
+    const [userSelect, setUserSelect] = useState<selectModel[]>([])
+
+    useEffect(() => {
+        handleGetAllUsers()
+    }, [])
+
+    // Handle getting data from firestore
+    const handleGetAllUsers = async () => {
+        try {
+            const snapshot = await firestore().collection('users').get();
+
+            if (snapshot.empty) {
+                console.log('User data not found');
+            } else {
+                const items: selectModel[] = [];
+
+                snapshot.forEach((item) => {
+                    items.push({
+                        label: item.data().name,
+                        value: item.id,
+                    });
+                });
+
+                setUserSelect(items);
+            }
+        } catch (error: any) {
+            console.error(`Cannot get user data: ${error.message}`);
+        }
+    };
 
     const handleChangeValue = (id: string, value: string | Date) => {
         const item: any = { ...taskDetail };
@@ -84,7 +115,7 @@ const AddNewTask = ({ navigation }: any) => {
                 </RowComponent>
             </SectionComponent>
 
-            <DropDownPicker selected={taskDetail.uids} items={[]}
+            <DropDownPicker selected={taskDetail.uids} items={userSelect}
             onSelect={(val) => console.log(val) }
             multiple
             title='Members' />

@@ -19,7 +19,7 @@ interface Props {
 const DropDownPicker = (props: Props) => {
 
     const { title, items, selected, multiple, onSelect } = props;
-
+    // console.log(items)
     return (
         <View style={{ marginBottom: 16 }}>
             {title && <TitleComponent text={title} />}
