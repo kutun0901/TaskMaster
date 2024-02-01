@@ -9,6 +9,8 @@ import { ArrowDown2, SearchNormal1, TickCircle } from 'iconsax-react-native';
 import { globalStyles } from '../styles/globalStyles';
 import ButtonComponent from './ButtonComponent';
 import InputComponent from './InputComponent';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import SpaceComponent from './SpaceComponent';
 
 interface Props {
     title?: string;
@@ -39,18 +41,63 @@ const DropDownPicker = (props: Props) => {
 
     }, [searchKey])
 
+    useEffect(() => {
+        selected && setDataSelected(selected)
+
+    }, [isVisible, selected])
+
     const handleSelectedItems = (id: string) => {
-        const  data = [...dataSelected]
+        if (multiple){
+            const  data = [...dataSelected]
 
-        const index = data.findIndex(element => element === id)
+            const index = data.findIndex(element => element === id)
 
-        if (index !== -1){
-            data.splice(index, 1)
-         } else {
-            data.push(id)
-         }
+            if (index !== -1){
+                data.splice(index, 1)
+             } else {
+                data.push(id)
+             }
 
-         setDataSelected(data)
+             setDataSelected(data)
+        } else {
+            setDataSelected([id])
+        }
+    }
+
+    const handleConfirmSelect = () => {
+        onSelect(dataSelected)
+        setIsVisible(false);
+        setDataSelected([]);
+    }
+
+    const handleRemoveItemSelected = (index: number) =>{
+        if (selected) {
+            selected.splice(index, 1)
+
+            onSelect(selected)
+        }
+    }
+
+    const renderSelectedItem = (id: string, index: number) => {
+
+        const item = items.find(element => element.value === id)
+
+        return (item && (<RowComponent key={id}
+        onPress={() => handleRemoveItemSelected(index)}
+        styles={{
+            marginRight: 4,
+            padding: 4,
+            borderRadius: 100,
+            borderWidth: 0.5,
+            borderColor: colors.gray2,
+            marginBottom: 8
+        }}
+        >
+            <TextComponent text={item.label} flex={0}/>
+            <SpaceComponent width={8}/>
+            <AntDesign name='close' size={14} color={colors.text}/>
+        </RowComponent>)
+        )
     }
 
     // console.log(items)
@@ -65,7 +112,12 @@ const DropDownPicker = (props: Props) => {
             }
             ]}>
                 <View style={{ flex: 1, paddingRight: 12 }}>
-                    <TextComponent text='Select' color={colors.gray2} flex={0} />
+                    {
+                        selected && selected.length > 0 ? <RowComponent justify='flex-start' styles={{flexWrap: 'wrap'}}>
+                            {selected.map((id, index) => renderSelectedItem(id, index))}
+                        </RowComponent>
+                    : <TextComponent text='Select' color={colors.gray2} flex={0} />
+                    }
                 </View>
                 <ArrowDown2 size={20} color={colors.text} />
             </RowComponent>
@@ -115,7 +167,7 @@ const DropDownPicker = (props: Props) => {
                             </RowComponent>
                         )}
                     />
-                    <ButtonComponent text='Confirm' onPress={() => setIsVisible(false)} />
+                    <ButtonComponent text='Confirm' onPress={handleConfirmSelect} />
                 </View>
             </Modal>
         </View>

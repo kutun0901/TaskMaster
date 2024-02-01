@@ -55,7 +55,7 @@ const AddNewTask = ({ navigation }: any) => {
         }
     };
 
-    const handleChangeValue = (id: string, value: string | Date) => {
+    const handleChangeValue = (id: string, value: string| string[]| Date) => {
         const item: any = { ...taskDetail };
 
         item[`${id}`] = value;
@@ -115,9 +115,10 @@ const AddNewTask = ({ navigation }: any) => {
                 </RowComponent>
             </SectionComponent>
 
-            <DropDownPicker selected={taskDetail.uids}
+            <DropDownPicker
+            selected={taskDetail.uids}
             items={userSelect}
-            onSelect={(val) => console.log(val) }
+            onSelect={(val) => handleChangeValue('uids', val) }
             multiple
             title='Members' />
 
