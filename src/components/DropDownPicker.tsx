@@ -1,11 +1,11 @@
 import { View, Text, FlatList, Modal, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { selectModel } from '../models/SelectModel';
 import TitleComponent from './TitleComponent';
 import RowComponent from './RowComponent';
 import TextComponent from './TextComponent';
 import { colors } from '../constants/colors';
-import { ArrowDown2, SearchNormal1 } from 'iconsax-react-native';
+import { ArrowDown2, SearchNormal1, TickCircle } from 'iconsax-react-native';
 import { globalStyles } from '../styles/globalStyles';
 import ButtonComponent from './ButtonComponent';
 import InputComponent from './InputComponent';
@@ -22,6 +22,36 @@ const DropDownPicker = (props: Props) => {
 
     const { title, items, selected, multiple, onSelect } = props;
     const [isVisible, setIsVisible] = useState(false);
+    const [searchKey, setSearchKey] = useState('')
+    const [results, setResults] = useState<selectModel[]>([])
+    const [dataSelected, setDataSelected] = useState<string[]>([])
+
+    useEffect(() => {
+        if (!searchKey){
+            setResults([])
+        } else {
+            const data = items.filter(element => {
+                // console.log(element.label)
+                return element.label.toLowerCase().includes(searchKey.toLowerCase())
+            })
+            setResults(data);
+        }
+
+    }, [searchKey])
+
+    const handleSelectedItems = (id: string) => {
+        const  data = [...dataSelected]
+
+        const index = data.findIndex(element => element === id)
+
+        if (index !== -1){
+            data.splice(index, 1)
+         } else {
+            data.push(id)
+         }
+
+         setDataSelected(data)
+    }
 
     // console.log(items)
     return (
@@ -57,10 +87,11 @@ const DropDownPicker = (props: Props) => {
                             <RowComponent styles={{alignItems: 'center', justifyContent: 'center'}}>
                                 <View style={{flex: 1, marginRight: 16}}>
                                     <InputComponent
-                                    value=''
-                                    onChange={val => console.log(val)}
-                                    placeHolder='Search'
+                                    value={searchKey}
+                                    onChange={val => setSearchKey(val)}
+                                    placeHolder='Search..'
                                     prefix={<SearchNormal1 size={20} color={colors.gray2} />}
+                                    allowClear
                                     />
                                 </View>
                                 <TouchableOpacity onPress={() => setIsVisible(false) }>
@@ -69,10 +100,18 @@ const DropDownPicker = (props: Props) => {
                             </RowComponent>
                         }
                         style={{ flex: 1 }}
-                        data={items}
+                        data={searchKey ? results : items}
                         renderItem={({ item }) => (
-                            <RowComponent key={item.value} styles={{paddingVertical: 16}}>
-                                <TextComponent text={item.label} size={20} />
+                            <RowComponent onPress={() => handleSelectedItems(item.value)} key={item.value} styles={{paddingVertical: 16}}>
+                                <TextComponent text={item.label}
+                                size={16}
+                                color={dataSelected.includes(item.value) ? 'coral' : colors.text}
+                                />
+                                {
+                                    dataSelected.includes(item.value) && (
+                                        <TickCircle size={22} color='coral' />
+                                    )
+                                }
                             </RowComponent>
                         )}
                     />
