@@ -11,6 +11,12 @@ import SpaceComponent from '../components/SpaceComponent'
 import DropDownPicker from '../components/DropDownPicker'
 import { selectModel } from '../models/SelectModel'
 import firestore from '@react-native-firebase/firestore'
+import ButtonComponent from '../components/ButtonComponent'
+import TitleComponent from '../components/TitleComponent'
+import { AttachSquare } from 'iconsax-react-native'
+import { colors } from '../constants/colors'
+import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker'
+import TextComponent from '../components/TextComponent'
 
 const initValues: TaskModel = {
     title: '',
@@ -26,6 +32,7 @@ const AddNewTask = ({ navigation }: any) => {
 
     const [taskDetail, setTaskDetail] = useState<TaskModel>(initValues)
     const [userSelect, setUserSelect] = useState<selectModel[]>([])
+    const [attachments, setAttachments] = useState<DocumentPickerResponse[]>([])
 
     useEffect(() => {
         handleGetAllUsers()
@@ -55,7 +62,7 @@ const AddNewTask = ({ navigation }: any) => {
         }
     };
 
-    const handleChangeValue = (id: string, value: string| string[]| Date) => {
+    const handleChangeValue = (id: string, value: string | string[] | Date) => {
         const item: any = { ...taskDetail };
 
         item[`${id}`] = value;
@@ -65,6 +72,15 @@ const AddNewTask = ({ navigation }: any) => {
 
     const handleAddNewTask = async () => {
         console.log(taskDetail)
+    }
+
+    const handleDocumentPicker = () => {
+        DocumentPicker.pick({}).then(res => {
+            setAttachments(res)
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
 
     return (
@@ -89,41 +105,57 @@ const AddNewTask = ({ navigation }: any) => {
                 />
 
                 <DateTimeComponent
-                selected={taskDetail.dueDate}
-                onSelect={val => handleChangeValue('dueDate', val)}
-                placeholder='Choice'
-                type='date'
-                title='Due date'
+                    selected={taskDetail.dueDate}
+                    onSelect={val => handleChangeValue('dueDate', val)}
+                    placeholder='Choice'
+                    type='date'
+                    title='Due date'
                 />
 
                 <RowComponent>
-                    <View style={{flex: 1}}>
-                    <DateTimeComponent selected={taskDetail.start}
-                    type='time'
-                    onSelect={val => handleChangeValue("start", val)}
-                    title='Start'
-                    />
+                    <View style={{ flex: 1 }}>
+                        <DateTimeComponent selected={taskDetail.start}
+                            type='time'
+                            onSelect={val => handleChangeValue("start", val)}
+                            title='Start'
+                        />
                     </View>
-                    <SpaceComponent width={10}/>
-                    <View style={{flex: 1}}>
-                    <DateTimeComponent selected={taskDetail.end}
-                    onSelect={val => handleChangeValue('end', val)}
-                    title='End'
-                    type='time'
-                    />
+                    <SpaceComponent width={10} />
+                    <View style={{ flex: 1 }}>
+                        <DateTimeComponent selected={taskDetail.end}
+                            onSelect={val => handleChangeValue('end', val)}
+                            title='End'
+                            type='time'
+                        />
                     </View>
                 </RowComponent>
+
+                <DropDownPicker
+                    selected={taskDetail.uids}
+                    items={userSelect}
+                    onSelect={(val) => handleChangeValue('uids', val)}
+                    multiple
+                    title='Members' />
+
+                <View>
+                    <RowComponent justify='flex-start' onPress={handleDocumentPicker}>
+                        <TitleComponent text='Attachments' flex={0} />
+                        <SpaceComponent width={8}/>
+                        <AttachSquare size={20} color={colors.white}/>
+                    </RowComponent>
+                    {
+                        attachments.length > 0 && attachments.map((item, index) => (
+                            <RowComponent key={`attachment${index}`} styles={{paddingVertical: 12}}>
+                                <TextComponent text={item.name ?? ''}/>
+                            </RowComponent>
+                        ))
+                    }
+                </View>
             </SectionComponent>
 
-            <DropDownPicker
-            selected={taskDetail.uids}
-            items={userSelect}
-            onSelect={(val) => handleChangeValue('uids', val) }
-            multiple
-            title='Members' />
 
             <SectionComponent>
-                <Button title='Save' onPress={handleAddNewTask} />
+                <ButtonComponent text='Save' onPress={handleAddNewTask} />
             </SectionComponent>
         </Container>
     );
