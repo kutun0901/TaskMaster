@@ -18,6 +18,7 @@ import { colors } from '../constants/colors'
 import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker'
 import TextComponent from '../components/TextComponent'
 import storage from '@react-native-firebase/storage'
+import RNFetchBlob from 'rn-fetch-blob'
 
 
 const initValues: TaskModel = {
@@ -86,7 +87,7 @@ const AddNewTask = ({ navigation }: any) => {
             })
     }
 
-// handle permission access to upload file in android. ios doesn't require this step.
+    // handle permission access to upload file in android. ios doesn't require this step.
     useEffect(() => {
         if (Platform.OS === "android") {
             PermissionsAndroid.requestMultiple([
@@ -97,13 +98,25 @@ const AddNewTask = ({ navigation }: any) => {
     }, [])
 
 
+    // handle uri to match accepted format in android
+    const getFilePath = async (file: DocumentPickerResponse) => {
+        if (Platform.OS === 'ios') {
+            return file.uri
+        } else {
+            return (await RNFetchBlob.fs.stat(file.uri)).path;
+        }
+    }
+
+
     const handleUploadFiletoStorage = async (item: DocumentPickerResponse) => {
         const fileName = item.name ?? `file${Date.now()}`;
         const path = `documents/${fileName}`
         const items = [...attachmentUrl]
 
+        const uri = await getFilePath(item)
+
         // upload file to storage
-        await storage().ref(path).putFile(item.uri)
+        await storage().ref(path).putFile(uri)
 
         // get the download link to store on local device after upload file
         await storage().ref(path).getDownloadURL().then(url => {
@@ -117,7 +130,18 @@ const AddNewTask = ({ navigation }: any) => {
 
 
     const handleAddNewTask = async () => {
-        console.log(taskDetail)
+        const data = {
+            ...taskDetail,
+            fileUrls: attachmentUrl
+        }
+
+        await firestore().collection('tasks').add(data).then(() => {
+            console.log('New tasks added')
+            navigation.goBack()
+        }).catch(error => {
+            console.log(error)
+        })
+
     }
 
     return (
