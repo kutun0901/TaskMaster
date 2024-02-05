@@ -1,4 +1,4 @@
-import { View, Text, Button } from 'react-native'
+import { View, Text, Button, Platform, PermissionsAndroid } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Container from '../components/Container'
 // import TextComponent from '../components/TextComponent'
@@ -17,6 +17,8 @@ import { AttachSquare } from 'iconsax-react-native'
 import { colors } from '../constants/colors'
 import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker'
 import TextComponent from '../components/TextComponent'
+import storage from '@react-native-firebase/storage'
+
 
 const initValues: TaskModel = {
     title: '',
@@ -33,6 +35,8 @@ const AddNewTask = ({ navigation }: any) => {
     const [taskDetail, setTaskDetail] = useState<TaskModel>(initValues)
     const [userSelect, setUserSelect] = useState<selectModel[]>([])
     const [attachments, setAttachments] = useState<DocumentPickerResponse[]>([])
+    const [attachmentUrl, setAttachmentUrl] = useState<string[]>([])
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         handleGetAllUsers()
@@ -70,17 +74,50 @@ const AddNewTask = ({ navigation }: any) => {
         setTaskDetail(item);
     }
 
-    const handleAddNewTask = async () => {
-        console.log(taskDetail)
-    }
 
     const handleDocumentPicker = () => {
         DocumentPicker.pick({}).then(res => {
             setAttachments(res)
+
+            res.forEach(item => handleUploadFiletoStorage(item))
         })
-        .catch(error => {
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
+// handle permission access to upload file in android. ios doesn't require this step.
+    useEffect(() => {
+        if (Platform.OS === "android") {
+            PermissionsAndroid.requestMultiple([
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
+            ])
+        }
+    }, [])
+
+
+    const handleUploadFiletoStorage = async (item: DocumentPickerResponse) => {
+        const fileName = item.name ?? `file${Date.now()}`;
+        const path = `documents/${fileName}`
+        const items = [...attachmentUrl]
+
+        // upload file to storage
+        await storage().ref(path).putFile(item.uri)
+
+        // get the download link to store on local device after upload file
+        await storage().ref(path).getDownloadURL().then(url => {
+            items.push(url)
+            setAttachmentUrl(items)
+
+        }).catch(error => {
             console.log(error)
         })
+    }
+
+
+    const handleAddNewTask = async () => {
+        console.log(taskDetail)
     }
 
     return (
@@ -140,13 +177,13 @@ const AddNewTask = ({ navigation }: any) => {
                 <View>
                     <RowComponent justify='flex-start' onPress={handleDocumentPicker}>
                         <TitleComponent text='Attachments' flex={0} />
-                        <SpaceComponent width={8}/>
-                        <AttachSquare size={20} color={colors.white}/>
+                        <SpaceComponent width={8} />
+                        <AttachSquare size={20} color={colors.white} />
                     </RowComponent>
                     {
                         attachments.length > 0 && attachments.map((item, index) => (
-                            <RowComponent key={`attachment${index}`} styles={{paddingVertical: 12}}>
-                                <TextComponent text={item.name ?? ''}/>
+                            <RowComponent key={`attachment${index}`} styles={{ paddingVertical: 12 }}>
+                                <TextComponent text={item.name ?? ''} />
                             </RowComponent>
                         ))
                     }
