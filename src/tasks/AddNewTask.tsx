@@ -18,8 +18,7 @@ import { colors } from '../constants/colors'
 import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker'
 import TextComponent from '../components/TextComponent'
 import storage from '@react-native-firebase/storage'
-import RNFetchBlob from 'rn-fetch-blob'
-
+import RNFetchBlob from "rn-fetch-blob";
 
 const initValues: TaskModel = {
     title: '',
@@ -78,6 +77,7 @@ const AddNewTask = ({ navigation }: any) => {
 
     const handleDocumentPicker = () => {
         DocumentPicker.pick({}).then(res => {
+            // console.log(res)
             setAttachments(res)
 
             res.forEach(item => handleUploadFiletoStorage(item))
@@ -113,7 +113,9 @@ const AddNewTask = ({ navigation }: any) => {
         const path = `documents/${fileName}`
         const items = [...attachmentUrl]
 
+        console.log("----------")
         const uri = await getFilePath(item)
+        console.log("----------", uri)
 
         // upload file to storage
         await storage().ref(path).putFile(uri)
