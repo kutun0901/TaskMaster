@@ -113,9 +113,8 @@ const AddNewTask = ({ navigation }: any) => {
         const path = `documents/${fileName}`
         const items = [...attachmentUrl]
 
-        console.log("----------")
+        // console.log(item)
         const uri = await getFilePath(item)
-        console.log("----------", uri)
 
         // upload file to storage
         await storage().ref(path).putFile(uri)

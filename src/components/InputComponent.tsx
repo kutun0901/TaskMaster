@@ -34,7 +34,7 @@ const InputComponent = (props: Props) => {
             {
                 marginTop: title ? 8 : 0,
                 minHeight: multiple && numberOfLine ? 32 * numberOfLine : 32,
-                paddingVertical: 22,
+                // paddingVertical: 22,
                 paddingHorizontal: 10,
                 alignItems: 'flex-start',
                 // flexDirection: 'row'
@@ -42,7 +42,9 @@ const InputComponent = (props: Props) => {
             }]}>
                 {prefix && prefix}
                 <View style={{ flex: 1 }}>
-                    <TextInput style={[globalStyles.text, { margin: 0, paddingVertical: 0, paddingHorizontal: 6, flex: 1}]}
+                    <TextInput style={[globalStyles.text,
+                    // { margin: 0, paddingVertical: 0, paddingHorizontal: 6, flex: 1}
+                ]}
                         placeholder={placeHolder ?? ""}
                         placeholderTextColor={'#676767'}
                         value={value}

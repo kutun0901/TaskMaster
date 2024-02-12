@@ -6,10 +6,12 @@ import { colors } from '../constants/colors';
 import { fontFamilies } from '../constants/fontFamilies';
 
 interface Props{
-
+    uids: string[]
 }
 
-const AvatarGroup = () => {
+const AvatarGroup = (props: Props) => {
+
+    const {uids} = props;
 
     const uidsLength = 10;
     const imageUrl = 'https://static.wikia.nocookie.net/saintpirates/images/6/66/Tony_Tony_Chopper.png'
