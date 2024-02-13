@@ -7,6 +7,7 @@ import SearchScreen from '../SearchScreen';
 import auth from '@react-native-firebase/auth';
 import LogInScreen from '../screens/auth/LogInScreen';
 import SignupScreen from '../screens/auth/SignupScreen';
+import TaskDetails from '../tasks/TaskDetails';
 
 
 
@@ -34,6 +35,7 @@ const Router = () => {
       <Stack.Screen name='HomeScreen' component={HomeScreen} />
       <Stack.Screen name='AddNewTask' component={AddNewTask} />
       <Stack.Screen name='SearchScreen' component={SearchScreen} />
+      <Stack.Screen name='TaskDetails' component={TaskDetails} />
     </Stack.Navigator>
   )
 
