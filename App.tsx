@@ -8,16 +8,16 @@ import Router from './src/routers/Router'
 const App = () => {
   return (
     <>
-      <SafeAreaView style={{ flex: 1 }}>
-        <StatusBar
+
+        {/* <StatusBar
           // translucent
           barStyle={'light-content'}
           backgroundColor={colors.bgColor}
-        />
+        /> */}
         <NavigationContainer>
           <Router />
         </NavigationContainer>
-      </SafeAreaView>
+
     </>
 
   )
