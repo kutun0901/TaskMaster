@@ -12,6 +12,7 @@ import TitleComponent from '../components/TitleComponent'
 import SpaceComponent from '../components/SpaceComponent'
 import AvatarGroup from '../components/AvatarGroup'
 import { HandleDateTime } from '../utils/handleDateTime'
+import CardComponent from '../components/CardComponent'
 
 const TaskDetails = ({ navigation, route }: any) => {
 
@@ -25,51 +26,68 @@ const TaskDetails = ({ navigation, route }: any) => {
 
     const getTaskDetails = () => {
         firestore().doc(`tasks/${id}`)
-        .onSnapshot((snap : any) => {
-            if (snap.exists){
-                setTaskDetail({
-                    id,
-                    ...snap.data(),
-                })
-            } else {
-                console.log('Task detail not found')
-            }
-        })
+            .onSnapshot((snap: any) => {
+                if (snap.exists) {
+                    setTaskDetail({
+                        id,
+                        ...snap.data(),
+                    })
+                } else {
+                    console.log('Task detail not found')
+                }
+            })
 
     }
     console.log(taskDetail)
 
     return taskDetail ? (
-        <ScrollView style={[{flex: 1}]}>
-            <SectionComponent styles={{
-                backgroundColor: color ?? 'rgba(113, 77, 217, 0.9)',
-                paddingVertical: 20,
-                paddingTop: 32
-            }}>
-            <RowComponent>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <ArrowLeft2 size={28} color={colors.text}/>
-                </TouchableOpacity>
-                <SpaceComponent width={12}/>
-                <TitleComponent text={taskDetail.title} size={20} flex={1} styles={{marginBottom: 0}}/>
-            </RowComponent>
-            <SpaceComponent height={30} />
-            <TextComponent text='Due date'/>
-            <RowComponent styles={{marginTop: 8}}>
-                <RowComponent styles={{flex: 1}} >
-                    <Clock size={18} color={colors.text}/>
-                    <SpaceComponent width={8} />
-                    <TextComponent text={`${HandleDateTime.GetHour(taskDetail.start?.toDate())} - ${HandleDateTime.GetHour(taskDetail.end?.toDate())}`}/>
+        <ScrollView style={[{ flex: 1, backgroundColor: colors.bgColor }]}>
+            <SectionComponent
+                color={color ?? 'rgba(113, 77, 217, 0.9)'}
+                styles={{
+                    backgroundColor: color ?? 'rgba(113, 77, 217, 0.9)',
+                    paddingVertical: 20,
+                    paddingTop: 32,
+                    borderBottomLeftRadius: 20,
+                    borderBottomRightRadius: 20
+                }}>
+                <RowComponent>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <ArrowLeft2 size={28} color={colors.text} />
+                    </TouchableOpacity>
+                    <SpaceComponent width={12} />
+                    <TitleComponent text={taskDetail.title} size={20} flex={1} styles={{ marginBottom: 0 }} />
                 </RowComponent>
-                <RowComponent styles={{flex: 1}} >
-                    <CalendarEdit size={18} color={colors.text}/>
-                    <SpaceComponent width={8} />
-                    <TextComponent text='May 29th'/>
+                <SpaceComponent height={30} />
+                <TextComponent text='Due date' />
+                <RowComponent styles={{ marginTop: 8 }}>
+                    <RowComponent styles={{ flex: 1 }} >
+                        <Clock size={18} color={colors.text} />
+                        <SpaceComponent width={8} />
+                        <TextComponent text={`${HandleDateTime.GetHour(taskDetail.start?.toDate())} - ${HandleDateTime.GetHour(taskDetail.end?.toDate())}`} />
+                    </RowComponent>
+                    <RowComponent styles={{ flex: 1 }} >
+                        <CalendarEdit size={18} color={colors.text} />
+                        <SpaceComponent width={8} />
+                        <TextComponent text='May 29th' />
+                    </RowComponent>
+                    <RowComponent styles={{ flex: 1 }} justify='flex-end'>
+                        <AvatarGroup uids={taskDetail.uids} />
+                    </RowComponent>
                 </RowComponent>
-                <RowComponent styles={{flex: 1}} justify='flex-end'>
-                    <AvatarGroup uids={taskDetail.uids} />
-                </RowComponent>
-            </RowComponent>
+            </SectionComponent>
+            <SectionComponent>
+                <TitleComponent text='Description' size={20} />
+                <CardComponent bgColor={colors.bgColor}
+                styles={{
+                    borderWidth: 1,
+                    borderColor: colors.gray,
+                    borderRadius: 12,
+                    marginTop: 12,
+                }}
+                >
+                    <TextComponent text={taskDetail.description} />
+                </CardComponent>
             </SectionComponent>
         </ScrollView>
     ) : (

@@ -116,7 +116,7 @@ const HomeScreen = ({ navigation }: any) => {
                         <Edit2 size={20} color={colors.white} />
                       </TouchableOpacity>
                       <TitleComponent text={tasks[0].title} />
-                      <TextComponent text={tasks[0].description} size={13} />
+                      <TextComponent line={3} text={tasks[0].description} size={13} />
                       <View style={{ marginVertical: 28 }}>
                         <AvatarGroup uids={tasks[0].uids} />
                         {tasks[0].progress && (
