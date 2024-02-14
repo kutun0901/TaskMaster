@@ -11,6 +11,7 @@ import { TaskModel } from '../models/TaskModel'
 import TitleComponent from '../components/TitleComponent'
 import SpaceComponent from '../components/SpaceComponent'
 import AvatarGroup from '../components/AvatarGroup'
+import { HandleDateTime } from '../utils/handleDateTime'
 
 const TaskDetails = ({ navigation, route }: any) => {
 
@@ -54,11 +55,11 @@ const TaskDetails = ({ navigation, route }: any) => {
             </RowComponent>
             <SpaceComponent height={30} />
             <TextComponent text='Due date'/>
-            <RowComponent styles={{marginTop: 12}}>
+            <RowComponent styles={{marginTop: 8}}>
                 <RowComponent styles={{flex: 1}} >
                     <Clock size={18} color={colors.text}/>
                     <SpaceComponent width={8} />
-                    <TextComponent text='10am - 8pm'/>
+                    <TextComponent text={`${HandleDateTime.GetHour(taskDetail.start?.toDate())} - ${HandleDateTime.GetHour(taskDetail.end?.toDate())}`}/>
                 </RowComponent>
                 <RowComponent styles={{flex: 1}} >
                     <CalendarEdit size={18} color={colors.text}/>
