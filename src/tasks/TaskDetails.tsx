@@ -4,7 +4,7 @@ import SectionComponent from '../components/SectionComponent'
 import TextComponent from '../components/TextComponent'
 import { ScrollView, TouchableOpacity, View } from 'react-native'
 import RowComponent from '../components/RowComponent'
-import { ArrowLeft2, CalendarEdit, Clock, DocumentUpload, TickCircle } from 'iconsax-react-native'
+import { AddSquare, ArrowLeft2, CalendarEdit, Clock, DocumentUpload, TickCircle } from 'iconsax-react-native'
 import { colors } from '../constants/colors'
 import firestore from '@react-native-firebase/firestore'
 import { TaskModel } from '../models/TaskModel'
@@ -55,20 +55,31 @@ const TaskDetails = ({ navigation, route }: any) => {
                     borderBottomLeftRadius: 20,
                     borderBottomRightRadius: 20
                 }}>
-                <RowComponent>
+                <RowComponent styles={{ alignItems: 'center' }}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <ArrowLeft2 size={28} color={colors.text} />
+                        <ArrowLeft2 size={28} color={colors.text} style={{ marginTop: -8, marginRight: 12 }} />
                     </TouchableOpacity>
                     <SpaceComponent width={12} />
                     <TitleComponent text={taskDetail.title} size={20} flex={1} styles={{ marginBottom: 0 }} />
                 </RowComponent>
                 <SpaceComponent height={30} />
                 <TextComponent text='Due date' />
-                <RowComponent styles={{ marginTop: 8 }}>
-                    <RowComponent styles={{ flex: 1 }} >
-                        <Clock size={18} color={colors.text} />
-                        <SpaceComponent width={8} />
-                        <TextComponent text={`${HandleDateTime.GetHour(taskDetail.start?.toDate())} - ${HandleDateTime.GetHour(taskDetail.end?.toDate())}`} />
+                <RowComponent styles={{justifyContent: 'space-between'}}>
+                    <RowComponent
+                        styles={{
+                            flex: 1,
+                            justifyContent: 'flex-start',
+                        }}>
+                        <Clock size={20} color={colors.white} />
+                        <SpaceComponent width={4} />
+                        {taskDetail.end && taskDetail.start && (
+                            <TextComponent
+                                flex={0}
+                                text={`${HandleDateTime.GetHour(
+                                    taskDetail.start?.toDate(),
+                                )} - ${HandleDateTime.GetHour(taskDetail.end?.toDate())}`}
+                            />
+                        )}
                     </RowComponent>
                     <RowComponent styles={{ flex: 1 }} >
                         <CalendarEdit size={18} color={colors.text} />
@@ -126,24 +137,30 @@ const TaskDetails = ({ navigation, route }: any) => {
                         }} />
 
                     </View>
-                    <TextComponent flex={1} text='Progress' font={fontFamilies.medium} size={18}/>
+                    <TextComponent flex={1} text='Progress' font={fontFamilies.medium} size={18} />
                 </RowComponent>
                 <SpaceComponent height={12} />
                 <RowComponent>
-                    <View style={{flex: 1}}>
+                    <View style={{ flex: 1 }}>
                         <TextComponent text='slide' />
                     </View>
-                    <TextComponent text='70%' flex={0} font={fontFamilies.bold} size={18}/>
+                    <TextComponent text='70%' flex={0} font={fontFamilies.bold} size={18} />
                 </RowComponent>
             </SectionComponent>
             <SectionComponent>
-                <TitleComponent text='Sub tasks' size={20}/>
-                {Array.from({length: 3}).map((item, index) => (
-                    <CardComponent key={`subtask${index}`} styles={{marginBottom: 12}}>
+                <RowComponent>
+                    <TitleComponent flex={1} text='Sub tasks' size={20} />
+                    <TouchableOpacity>
+                        <AddSquare size={24} color={colors.success} variant='Bold' />
+                    </TouchableOpacity>
+                </RowComponent>
+                <SpaceComponent height={12} />
+                {Array.from({ length: 3 }).map((item, index) => (
+                    <CardComponent key={`subtask${index}`} styles={{ marginBottom: 12 }}>
                         <RowComponent>
-                        <TickCircle variant='Bold' color={colors.success} size={20}/>
-                        <SpaceComponent width={8}/>
-                        <TextComponent text='fafa'/>
+                            <TickCircle variant='Bold' color={colors.success} size={20} />
+                            <SpaceComponent width={8} />
+                            <TextComponent text='fafa' />
                         </RowComponent>
 
                     </CardComponent>
