@@ -84,7 +84,7 @@ const TaskDetails = ({ navigation, route }: any) => {
                     <RowComponent styles={{ flex: 1 }} >
                         <CalendarEdit size={18} color={colors.text} />
                         <SpaceComponent width={8} />
-                        <TextComponent text='May 29th' />
+                        <TextComponent text={HandleDateTime.DateString(taskDetail.dueDate?.toDate())} />
                     </RowComponent>
                     <RowComponent styles={{ flex: 1 }} justify='flex-end'>
                         <AvatarGroup uids={taskDetail.uids} />

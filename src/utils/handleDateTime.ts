@@ -7,7 +7,7 @@ export class HandleDateTime {
         const date = new Date(num);
 
         // return `${date.getMonth() + 1}/${date.getDate()}`
-        return `${monthNames[date.getMonth()]}, ${date.getDate()} ${date.getFullYear()}`
+        return `${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
 
     }
 
