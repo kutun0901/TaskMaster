@@ -27,25 +27,50 @@ const AvatarGroup = (props: Props) => {
         getUserAvatar()
     }, [uids])
 
+    // You're using forEach with an async function inside. The problem with
+    // forEach in this context is that it doesn't wait for asynchronous
+    // operations to complete before moving on to the next iteration. This
+    // means that your state update might occur before the asynchronous Firestore calls finish,
+    //  resulting in incomplete or incorrect data being set in the state.
+
+    // const getUserAvatar = async () => {
+    //     uids.forEach(async id => {
+    //       await firestore()
+    //         .doc(`users/${id}`)
+    //         .get()
+    //         .then((snap: any) => {
+    //           const items: any = [...usersName];
+    //           if (snap.exists) {
+    //             items.push({
+    //               name: snap.data().name,
+    //               imgUrl: snap.data().imgUrl ?? '',
+    //             });
+    //           }
+    //           setUsersName(items);
+    //         })
+    //         .catch(error => {
+    //           console.log(error);
+    //         });
+    //     });
+    //   };
+
     const getUserAvatar = async () => {
-        uids.forEach(async id => {
-            await firestore()
-            .doc(`users/${id}`)
-            .get()
-            .then((snap: any) => {
-                const items: any = [...usersName]
-                if (snap.exists){
-                    items.push({
-                        name: snap.data().name,
-                        imgUrl: snap.data().imgUrl ?? ""
-                    })
-                }
-                setUsersName(items)
-            }).catch(error => {
-                console.log(error)
-            })
-        })
+    const updatedUsersName = [];
+    for (const id of uids) {
+        try {
+            const snap = await firestore().doc(`users/${id}`).get();
+            if (snap.exists) {
+                updatedUsersName.push({
+                    name: snap.data().name,
+                    imgUrl: snap.data().imgUrl ?? ""
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
+    setUsersName(updatedUsersName);
+};
 
     const imageStyle = {
         width: 32,

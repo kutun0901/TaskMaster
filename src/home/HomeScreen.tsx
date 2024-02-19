@@ -132,7 +132,7 @@ const HomeScreen = ({ navigation }: any) => {
                 <View style={{ flex: 1 }}>
                   {tasks[1] && (
                     <CardImage onPress={() => navigation.navigate('TaskDetails', {
-                      id: tasks[0].id,
+                      id: tasks[1].id,
                       color: 'rgba(33, 150, 243, 0.9)'
                     })}
                     color='rgba(33, 150, 243, 0.9)'>
@@ -151,7 +151,7 @@ const HomeScreen = ({ navigation }: any) => {
                   <SpaceComponent height={16} />
                   {tasks[2] && (
                     <CardImage onPress={() => navigation.navigate('TaskDetails', {
-                      id: tasks[0].id,
+                      id: tasks[2].id,
                       color: 'rgba(18, 181, 22, 0.9))'
                     })}
                     color='rgba(18, 181, 22, 0.9)'>
