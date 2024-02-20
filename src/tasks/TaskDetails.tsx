@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../styles/globalStyles'
 import SectionComponent from '../components/SectionComponent'
 import TextComponent from '../components/TextComponent'
-import { ScrollView, TouchableOpacity, View } from 'react-native'
+import { Alert, ScrollView, TouchableOpacity, View } from 'react-native'
 import RowComponent from '../components/RowComponent'
 import { AddSquare, ArrowLeft2, CalendarEdit, Clock, DocumentUpload, TickCircle } from 'iconsax-react-native'
 import { colors } from '../constants/colors'
@@ -26,10 +26,29 @@ const TaskDetails = ({ navigation, route }: any) => {
     const { id, color }: { id: string, color?: string } = route.params
     const [taskDetail, setTaskDetail] = useState<TaskModel>()
     const [progress, setProgress] = useState(0)
+    const [fileUrls, setFileUrls] = useState<string[]>([])
+    const [subtasks, setSubTasks] = useState<any[]>([])
+    const [isChanged, setIsChanged] = useState(false)
 
     useEffect(() => {
         getTaskDetails()
-    }, [])
+    }, [id])
+
+    useEffect(() =>{
+        if(taskDetail){
+            setProgress(taskDetail.progress ?? 0)
+            setFileUrls(taskDetail.fileUrls)
+        }
+
+    }, [taskDetail])
+
+    useEffect(() => {
+        if(progress !== taskDetail?.progress || fileUrls.length !== taskDetail.fileUrls.length){
+            setIsChanged(true)
+        } else {
+            setIsChanged(false)
+        }
+    }, [progress, fileUrls, taskDetail ])
 
     const getTaskDetails = () => {
         firestore().doc(`tasks/${id}`)
@@ -45,7 +64,19 @@ const TaskDetails = ({ navigation, route }: any) => {
             })
 
     }
-    console.log(taskDetail)
+
+
+    const handleUpdateTask = async() => {
+        const data = {...taskDetail, progress, fileUrls, updatedAt: Date.now()}
+
+        await firestore()
+        .doc(`tasks/${id}`)
+        .update(data)
+        .then(() => {
+            Alert.alert('Task updated')
+        }).catch(error => console.log(error))
+    }
+    // console.log(taskDetail)
 
     return taskDetail ? (
         <>
@@ -180,12 +211,12 @@ const TaskDetails = ({ navigation, route }: any) => {
                 ))}
             </SectionComponent>
         {
-          1 > 2 && (  <View style={{position: 'absolute',
+          isChanged && (  <View style={{position: 'absolute',
                 bottom: 20,
                 right: 20,
                 left: 20
             }}>
-                <ButtonComponent text='Update' onPress={() => {}}/>
+                <ButtonComponent text='Update' onPress={handleUpdateTask}/>
             </View>)
         }
         </ScrollView>

@@ -119,9 +119,9 @@ const HomeScreen = ({ navigation }: any) => {
                       <TextComponent line={3} text={tasks[0].description} size={13} />
                       <View style={{ marginVertical: 28 }}>
                         <AvatarGroup uids={tasks[0].uids} />
-                        {tasks[0].progress && (
-                          <ProgressBarComponent percent="70%" color='#0AACFF' size='large' />
-                        )}
+                        {tasks[0].progress && (tasks[0].progress as number) >= 0 ? (
+                          <ProgressBarComponent percent={`${Math.floor(tasks[0].progress * 100)}%`} color='#0AACFF' size='large' />
+                        ) : null}
                       </View>
                       <TextComponent text={`Due ${new Date(tasks[0].dueDate.toDate())}`} size={12} color={colors.desc} />
                     </CardImage>)
@@ -142,9 +142,9 @@ const HomeScreen = ({ navigation }: any) => {
                       <TitleComponent text={tasks[1].title} size={18} />
                       <TextComponent text={tasks[1].description} />
                       <AvatarGroup uids={tasks[1].uids} />
-                      {tasks[1].progress && (
-                        <ProgressBarComponent percent="40%" color='#A2F068' />
-                      )}
+                      {tasks[1].progress && (tasks[1].progress as number) >= 0 ? (
+                        <ProgressBarComponent percent={`${Math.floor(tasks[1].progress * 100)}%`} color='#A2F068' />
+                      ): null}
 
                     </CardImage>
                   )}
