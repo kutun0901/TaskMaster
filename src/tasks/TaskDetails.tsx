@@ -17,12 +17,15 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { fontFamilies } from '../constants/fontFamilies'
+import { Slider } from '@miblanchard/react-native-slider'
+import ButtonComponent from '../components/ButtonComponent'
 
 const TaskDetails = ({ navigation, route }: any) => {
 
     // console.log(route)
     const { id, color }: { id: string, color?: string } = route.params
     const [taskDetail, setTaskDetail] = useState<TaskModel>()
+    const [progress, setProgress] = useState(0)
 
     useEffect(() => {
         getTaskDetails()
@@ -45,6 +48,7 @@ const TaskDetails = ({ navigation, route }: any) => {
     console.log(taskDetail)
 
     return taskDetail ? (
+        <>
         <ScrollView style={[{ flex: 1, backgroundColor: colors.bgColor }]}>
             <SectionComponent
                 color={color ?? 'rgba(113, 77, 217, 0.9)'}
@@ -142,9 +146,18 @@ const TaskDetails = ({ navigation, route }: any) => {
                 <SpaceComponent height={12} />
                 <RowComponent>
                     <View style={{ flex: 1 }}>
-                        <TextComponent text='slide' />
+                        <Slider value={progress}
+                        onValueChange={val => setProgress(val[0])}
+                        thumbTintColor={colors.success}
+                        thumbStyle={{borderWidth: 2, borderColor: colors.white}}
+                        maximumTrackTintColor={colors.gray2}
+                        minimumTrackTintColor={colors.success}
+                        trackStyle={{height: 10, borderRadius: 100}}
+
+                        />
                     </View>
-                    <TextComponent text='70%' flex={0} font={fontFamilies.bold} size={18} />
+                    <SpaceComponent width={20}/>
+                    <TextComponent text={`${Math.floor(progress * 100)}%`} flex={0} font={fontFamilies.bold} size={18} />
                 </RowComponent>
             </SectionComponent>
             <SectionComponent>
@@ -166,7 +179,17 @@ const TaskDetails = ({ navigation, route }: any) => {
                     </CardComponent>
                 ))}
             </SectionComponent>
+        {
+          1 > 2 && (  <View style={{position: 'absolute',
+                bottom: 20,
+                right: 20,
+                left: 20
+            }}>
+                <ButtonComponent text='Update' onPress={() => {}}/>
+            </View>)
+        }
         </ScrollView>
+        </>
     ) : (
         <></>
     )
