@@ -154,7 +154,7 @@ const TaskDetails = ({ navigation, route }: any) => {
 
                 <RowComponent>
                     <TitleComponent text='Files and Links' flex={1}/>
-                    <UploadFileComponent onUpload={file => console.log(file)}/>
+                    <UploadFileComponent onUpload={file => setAttachments([...attachments, file])}/>
                 </RowComponent>
             </SectionComponent>
             <SectionComponent>

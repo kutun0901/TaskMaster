@@ -10,6 +10,8 @@ import TitleComponent from './TitleComponent'
 import SpaceComponent from './SpaceComponent'
 import RowComponent from './RowComponent'
 import { Slider } from '@miblanchard/react-native-slider'
+import { calcFileSize } from '../utils/calculateFileSize'
+import storage from '@react-native-firebase/storage'
 
 interface Props {
     onUpload: (file: Attachment) => void
@@ -21,16 +23,40 @@ const UploadFileComponent = (props: Props) => {
     const [file, setFile] = useState<DocumentPickerResponse>()
     const [isVisibleUploadModal, setIsVisibleUploadModal] = useState(false)
     const [progressUpload, setProgressUpload] = useState(0)
+    const [attachmentFile, setAttachMentFile] = useState<Attachment>()
 
 
     useEffect(() => {
         file && handleUploadFiletoStorage()
-    }, [])
+    }, [file])
+
+    useEffect(() => {
+        if (attachmentFile){
+            onUpload(attachmentFile)
+            setIsVisibleUploadModal(false)
+        }
+    }, [attachmentFile])
 
     const handleUploadFiletoStorage = async () => {
-        setIsVisibleUploadModal(true)
+        if (file) {
+            setIsVisibleUploadModal(true)
 
-        console.log(file)
+            const path = `/documents/${file.name}`;
+
+            const res = await storage().ref(path).putFile(file.uri)
+
+            setProgressUpload(res.bytesTransferred/res.totalBytes)
+
+            storage().ref(path).getDownloadURL().then(url => {
+                const data: Attachment = {
+                    name: file.name ?? "",
+                    url,
+                    size: file.size ?? 0
+                }
+                setAttachMentFile(data)
+            })
+        }
+
     }
 
     return (
@@ -48,7 +74,7 @@ const UploadFileComponent = (props: Props) => {
             >
                 <View style={[globalStyles.container,
                 {
-                    // `${colors.gray}80` 80 is hex value. look it up color hex value instead of using rgba
+                    // `${colors.gray}80` 80 is hex opacity value. look it up color hex value instead of using rgba
                     backgroundColor: `${colors.gray}80`,
                     justifyContent: 'center',
                     alignItems: 'center'
@@ -69,7 +95,8 @@ const UploadFileComponent = (props: Props) => {
                             flex={0}
                             />
                             <TextComponent color={colors.gray2}
-                            text={`${file?.size} byte`}
+                            text={`${calcFileSize(file?.size as number)}`}
+                            size={12}
                             flex={0}
                             />
                         </View>
