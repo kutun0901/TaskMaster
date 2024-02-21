@@ -23,11 +23,11 @@ import RNFetchBlob from "rn-fetch-blob";
 const initValues: TaskModel = {
     title: '',
     description: '',
-    dueDate: new Date(),
-    start: new Date(),
-    end: new Date(),
+    dueDate: undefined,
+    start: undefined,
+    end: undefined,
     uids: [],
-    fileUrls: []
+    attachments: []
 }
 
 const AddNewTask = ({ navigation }: any) => {

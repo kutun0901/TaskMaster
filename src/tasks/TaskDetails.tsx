@@ -4,10 +4,10 @@ import SectionComponent from '../components/SectionComponent'
 import TextComponent from '../components/TextComponent'
 import { Alert, ScrollView, TouchableOpacity, View } from 'react-native'
 import RowComponent from '../components/RowComponent'
-import { AddSquare, ArrowLeft2, CalendarEdit, Clock, DocumentUpload, TickCircle } from 'iconsax-react-native'
+import { AddSquare, ArrowLeft2, CalendarEdit, Clock, DocumentCloud, DocumentUpload, TickCircle } from 'iconsax-react-native'
 import { colors } from '../constants/colors'
 import firestore from '@react-native-firebase/firestore'
-import { TaskModel } from '../models/TaskModel'
+import { Attachment, TaskModel } from '../models/TaskModel'
 import TitleComponent from '../components/TitleComponent'
 import SpaceComponent from '../components/SpaceComponent'
 import AvatarGroup from '../components/AvatarGroup'
@@ -19,6 +19,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import { fontFamilies } from '../constants/fontFamilies'
 import { Slider } from '@miblanchard/react-native-slider'
 import ButtonComponent from '../components/ButtonComponent'
+import UploadFileComponent from '../components/UploadFileComponent'
 
 const TaskDetails = ({ navigation, route }: any) => {
 
@@ -26,7 +27,7 @@ const TaskDetails = ({ navigation, route }: any) => {
     const { id, color }: { id: string, color?: string } = route.params
     const [taskDetail, setTaskDetail] = useState<TaskModel>()
     const [progress, setProgress] = useState(0)
-    const [fileUrls, setFileUrls] = useState<string[]>([])
+    const [attachments, setAttachments] = useState<Attachment[]>([])
     const [subtasks, setSubTasks] = useState<any[]>([])
     const [isChanged, setIsChanged] = useState(false)
 
@@ -37,18 +38,17 @@ const TaskDetails = ({ navigation, route }: any) => {
     useEffect(() =>{
         if(taskDetail){
             setProgress(taskDetail.progress ?? 0)
-            setFileUrls(taskDetail.fileUrls)
         }
 
     }, [taskDetail])
 
     useEffect(() => {
-        if(progress !== taskDetail?.progress || fileUrls.length !== taskDetail.fileUrls.length){
+        if(progress !== taskDetail?.progress){
             setIsChanged(true)
         } else {
             setIsChanged(false)
         }
-    }, [progress, fileUrls, taskDetail ])
+    }, [progress, taskDetail ])
 
     const getTaskDetails = () => {
         firestore().doc(`tasks/${id}`)
@@ -67,7 +67,7 @@ const TaskDetails = ({ navigation, route }: any) => {
 
 
     const handleUpdateTask = async() => {
-        const data = {...taskDetail, progress, fileUrls, updatedAt: Date.now()}
+        const data = {...taskDetail, progress, attachments, updatedAt: Date.now()}
 
         await firestore()
         .doc(`tasks/${id}`)
@@ -140,7 +140,7 @@ const TaskDetails = ({ navigation, route }: any) => {
                 </CardComponent>
             </SectionComponent>
             <SectionComponent>
-                <CardComponent>
+                {/* <CardComponent>
                     <RowComponent>
                         <TextComponent text='Files and Links' flex={0} />
                         <RowComponent styles={{ flex: 1 }}>
@@ -150,7 +150,12 @@ const TaskDetails = ({ navigation, route }: any) => {
                             <AntDesign name='addfile' size={32} color={colors.white} />
                         </RowComponent>
                     </RowComponent>
-                </CardComponent>
+                </CardComponent> */}
+
+                <RowComponent>
+                    <TitleComponent text='Files and Links' flex={1}/>
+                    <UploadFileComponent onUpload={file => console.log(file)}/>
+                </RowComponent>
             </SectionComponent>
             <SectionComponent>
                 <RowComponent>
