@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { globalStyles } from '../styles/globalStyles'
 import SectionComponent from '../components/SectionComponent'
 import TextComponent from '../components/TextComponent'
 import { Alert, ScrollView, TouchableOpacity, View } from 'react-native'
 import RowComponent from '../components/RowComponent'
-import { AddSquare, ArrowLeft2, CalendarEdit, Clock, DocumentCloud, DocumentUpload, TickCircle } from 'iconsax-react-native'
+import { AddSquare, ArrowLeft2, CalendarEdit, Clock, TickCircle } from 'iconsax-react-native'
 import { colors } from '../constants/colors'
 import firestore from '@react-native-firebase/firestore'
 import { Attachment, TaskModel } from '../models/TaskModel'
@@ -13,13 +12,11 @@ import SpaceComponent from '../components/SpaceComponent'
 import AvatarGroup from '../components/AvatarGroup'
 import { HandleDateTime } from '../utils/handleDateTime'
 import CardComponent from '../components/CardComponent'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import AntDesign from 'react-native-vector-icons/AntDesign'
 import { fontFamilies } from '../constants/fontFamilies'
 import { Slider } from '@miblanchard/react-native-slider'
 import ButtonComponent from '../components/ButtonComponent'
 import UploadFileComponent from '../components/UploadFileComponent'
+import { calcFileSize } from '../utils/calculateFileSize'
 
 const TaskDetails = ({ navigation, route }: any) => {
 
@@ -38,17 +35,18 @@ const TaskDetails = ({ navigation, route }: any) => {
     useEffect(() =>{
         if(taskDetail){
             setProgress(taskDetail.progress ?? 0)
+            setAttachments(taskDetail.attachments)
         }
 
     }, [taskDetail])
 
     useEffect(() => {
-        if(progress !== taskDetail?.progress){
+        if(progress !== taskDetail?.progress || attachments.length !== taskDetail.attachments?.length){
             setIsChanged(true)
         } else {
             setIsChanged(false)
         }
-    }, [progress, taskDetail ])
+    }, [progress, taskDetail, attachments])
 
     const getTaskDetails = () => {
         firestore().doc(`tasks/${id}`)
@@ -154,8 +152,17 @@ const TaskDetails = ({ navigation, route }: any) => {
 
                 <RowComponent>
                     <TitleComponent text='Files and Links' flex={1}/>
-                    <UploadFileComponent onUpload={file => setAttachments([...attachments, file])}/>
+                    <UploadFileComponent onUpload={file => file && setAttachments([...attachments, file])}/>
                 </RowComponent>
+                {
+                    attachments.map((item, index) => (
+                        <View style={{justifyContent: 'flex-start', marginBottom: 8}} key={`attachment${index}`}>
+                            <TextComponent flex={0} text={item.name}/>
+                            <TextComponent flex={0} text={calcFileSize(item.size)} size={12} />
+                        </View>
+                    ))
+                }
+
             </SectionComponent>
             <SectionComponent>
                 <RowComponent>
@@ -204,7 +211,7 @@ const TaskDetails = ({ navigation, route }: any) => {
                     </TouchableOpacity>
                 </RowComponent>
                 <SpaceComponent height={12} />
-                {Array.from({ length: 3 }).map((item, index) => (
+                {/* {Array.from({ length: 3 }).map((item, index) => (
                     <CardComponent key={`subtask${index}`} styles={{ marginBottom: 12 }}>
                         <RowComponent>
                             <TickCircle variant='Bold' color={colors.success} size={20} />
@@ -213,7 +220,7 @@ const TaskDetails = ({ navigation, route }: any) => {
                         </RowComponent>
 
                     </CardComponent>
-                ))}
+                ))} */}
             </SectionComponent>
         {
           isChanged && (  <View style={{position: 'absolute',

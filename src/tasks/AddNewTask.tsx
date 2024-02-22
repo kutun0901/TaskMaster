@@ -2,7 +2,7 @@ import { View, Text, Button, Platform, PermissionsAndroid } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Container from '../components/Container'
 // import TextComponent from '../components/TextComponent'
-import { TaskModel } from '../models/TaskModel'
+import { Attachment, TaskModel } from '../models/TaskModel'
 import SectionComponent from '../components/SectionComponent'
 import InputComponent from '../components/InputComponent'
 import DateTimeComponent from '../components/DateTimeComponent'
@@ -19,6 +19,7 @@ import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-pi
 import TextComponent from '../components/TextComponent'
 import storage from '@react-native-firebase/storage'
 import RNFetchBlob from "rn-fetch-blob";
+import UploadFileComponent from '../components/UploadFileComponent'
 
 const initValues: TaskModel = {
     title: '',
@@ -34,9 +35,8 @@ const AddNewTask = ({ navigation }: any) => {
 
     const [taskDetail, setTaskDetail] = useState<TaskModel>(initValues)
     const [userSelect, setUserSelect] = useState<selectModel[]>([])
-    const [attachments, setAttachments] = useState<DocumentPickerResponse[]>([])
-    const [attachmentUrl, setAttachmentUrl] = useState<string[]>([])
-    const [isLoading, setIsLoading] = useState(false)
+    const [attachments, setAttachments] = useState<Attachment[]>([])
+
 
     useEffect(() => {
         handleGetAllUsers()
@@ -75,17 +75,17 @@ const AddNewTask = ({ navigation }: any) => {
     }
 
 
-    const handleDocumentPicker = () => {
-        DocumentPicker.pick({}).then(res => {
-            // console.log(res)
-            setAttachments(res)
+    // const handleDocumentPicker = () => {
+    //     DocumentPicker.pick({}).then(res => {
+    //         // console.log(res)
+    //         setAttachments(res)
 
-            res.forEach(item => handleUploadFiletoStorage(item))
-        })
-            .catch(error => {
-                console.log(error)
-            })
-    }
+    //         res.forEach(item => handleUploadFiletoStorage(item))
+    //     })
+    //         .catch(error => {
+    //             console.log(error)
+    //         })
+    // }
 
     // handle permission access to upload file in android. ios doesn't require this step.
     useEffect(() => {
@@ -98,42 +98,42 @@ const AddNewTask = ({ navigation }: any) => {
     }, [])
 
 
-    // handle uri to match accepted format in android
-    const getFilePath = async (file: DocumentPickerResponse) => {
-        if (Platform.OS === 'ios') {
-            return file.uri
-        } else {
-            return (await RNFetchBlob.fs.stat(file.uri)).path;
-        }
-    }
+    // // handle uri to match accepted format in android
+    // const getFilePath = async (file: DocumentPickerResponse) => {
+    //     if (Platform.OS === 'ios') {
+    //         return file.uri
+    //     } else {
+    //         return (await RNFetchBlob.fs.stat(file.uri)).path;
+    //     }
+    // }
 
 
-    const handleUploadFiletoStorage = async (item: DocumentPickerResponse) => {
-        const fileName = item.name ?? `file${Date.now()}`;
-        const path = `documents/${fileName}`
-        const items = [...attachmentUrl]
+    // const handleUploadFiletoStorage = async (item: DocumentPickerResponse) => {
+    //     const fileName = item.name ?? `file${Date.now()}`;
+    //     const path = `documents/${fileName}`
+    //     const items = [...attachmentUrl]
 
-        // console.log(item)
-        const uri = await getFilePath(item)
+    //     // console.log(item)
+    //     const uri = await getFilePath(item)
 
-        // upload file to storage
-        await storage().ref(path).putFile(uri)
+    //     // upload file to storage
+    //     await storage().ref(path).putFile(uri)
 
-        // get the download link to store on local device after upload file
-        await storage().ref(path).getDownloadURL().then(url => {
-            items.push(url)
-            setAttachmentUrl(items)
+    //     // get the download link to store on local device after upload file
+    //     await storage().ref(path).getDownloadURL().then(url => {
+    //         items.push(url)
+    //         setAttachmentUrl(items)
 
-        }).catch(error => {
-            console.log(error)
-        })
-    }
+    //     }).catch(error => {
+    //         console.log(error)
+    //     })
+    // }
 
 
     const handleAddNewTask = async () => {
         const data = {
             ...taskDetail,
-            fileUrls: attachmentUrl
+            attachments
         }
 
         await firestore().collection('tasks').add(data).then(() => {
@@ -200,10 +200,10 @@ const AddNewTask = ({ navigation }: any) => {
                     title='Members' />
 
                 <View>
-                    <RowComponent justify='flex-start' onPress={handleDocumentPicker}>
+                    <RowComponent justify='flex-start'>
                         <TitleComponent text='Attachments' flex={0} />
                         <SpaceComponent width={8} />
-                        <AttachSquare size={20} color={colors.white} />
+                        <UploadFileComponent onUpload={file => file && setAttachments([...attachments, file])} />
                     </RowComponent>
                     {
                         attachments.length > 0 && attachments.map((item, index) => (

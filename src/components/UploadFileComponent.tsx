@@ -34,36 +34,48 @@ const UploadFileComponent = (props: Props) => {
         if (attachmentFile){
             onUpload(attachmentFile)
             setIsVisibleUploadModal(false)
+            setProgressUpload(0);
+            setAttachMentFile(undefined)
         }
     }, [attachmentFile])
 
-    const handleUploadFiletoStorage = async () => {
+    const handleUploadFiletoStorage =  () => {
         if (file) {
             setIsVisibleUploadModal(true)
 
             const path = `/documents/${file.name}`;
 
-            const res = await storage().ref(path).putFile(file.uri)
+            const res = storage().ref(path).putFile(file.uri)
 
-            setProgressUpload(res.bytesTransferred/res.totalBytes)
-
-            storage().ref(path).getDownloadURL().then(url => {
-                const data: Attachment = {
-                    name: file.name ?? "",
-                    url,
-                    size: file.size ?? 0
-                }
-                setAttachMentFile(data)
+            res.on('state_changed', task => {
+                setProgressUpload(task.bytesTransferred/task.totalBytes)
             })
+
+            res.then(() => {
+                storage().ref(path).getDownloadURL().then(url => {
+                    const data: Attachment = {
+                        name: file.name ?? "",
+                        url,
+                        size: file.size ?? 0
+                    }
+                    setAttachMentFile(data)
+                })
+            })
+
+            res.catch(error => console.log(error.message))
+
         }
 
     }
 
     return (
         <>
-            <TouchableOpacity onPress={() => DocumentPicker.pick({}).then(res => {
+            <TouchableOpacity onPress={() => DocumentPicker.pick({
+                allowMultiSelection: false,
+                type: ['application/pdf', DocumentPicker.types.docx, DocumentPicker.types.pdf]
+            }).then(res => {
                 setFile(res[0])
-            })}>
+            }).catch(error => console.log(error))}>
                 <DocumentUpload size={24} color={colors.white} />
             </TouchableOpacity>
             <Modal visible={isVisibleUploadModal}
@@ -103,6 +115,7 @@ const UploadFileComponent = (props: Props) => {
                         <RowComponent>
                             <View style={{flex: 1, marginRight: 12}}>
                                 <Slider
+                                disabled
                                 value={progressUpload}
                                 renderThumbComponent={() => null}
                                 trackStyle={{
