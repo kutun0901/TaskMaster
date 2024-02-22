@@ -17,6 +17,7 @@ import { Slider } from '@miblanchard/react-native-slider'
 import ButtonComponent from '../components/ButtonComponent'
 import UploadFileComponent from '../components/UploadFileComponent'
 import { calcFileSize } from '../utils/calculateFileSize'
+import AddSubTaskModal from '../modals/AddSubTaskModal'
 
 const TaskDetails = ({ navigation, route }: any) => {
 
@@ -27,6 +28,7 @@ const TaskDetails = ({ navigation, route }: any) => {
     const [attachments, setAttachments] = useState<Attachment[]>([])
     const [subtasks, setSubTasks] = useState<any[]>([])
     const [isChanged, setIsChanged] = useState(false)
+    const [isVisibleSubTaskModal, setIsVisibleSubTaskModal] = useState(false)
 
     useEffect(() => {
         getTaskDetails()
@@ -41,7 +43,7 @@ const TaskDetails = ({ navigation, route }: any) => {
     }, [taskDetail])
 
     useEffect(() => {
-        if(progress !== taskDetail?.progress || attachments.length !== taskDetail.attachments?.length){
+        if(progress !== taskDetail?.progress || attachments?.length !== taskDetail.attachments?.length){
             setIsChanged(true)
         } else {
             setIsChanged(false)
@@ -155,12 +157,12 @@ const TaskDetails = ({ navigation, route }: any) => {
                     <UploadFileComponent onUpload={file => file && setAttachments([...attachments, file])}/>
                 </RowComponent>
                 {
-                    attachments.map((item, index) => (
+                    attachments && (attachments.map((item, index) => (
                         <View style={{justifyContent: 'flex-start', marginBottom: 8}} key={`attachment${index}`}>
                             <TextComponent flex={0} text={item.name}/>
                             <TextComponent flex={0} text={calcFileSize(item.size)} size={12} />
                         </View>
-                    ))
+                    )))
                 }
 
             </SectionComponent>
@@ -206,7 +208,7 @@ const TaskDetails = ({ navigation, route }: any) => {
             <SectionComponent>
                 <RowComponent>
                     <TitleComponent flex={1} text='Sub tasks' size={20} />
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => setIsVisibleSubTaskModal(true)}>
                         <AddSquare size={24} color={colors.success} variant='Bold' />
                     </TouchableOpacity>
                 </RowComponent>
@@ -222,6 +224,7 @@ const TaskDetails = ({ navigation, route }: any) => {
                     </CardComponent>
                 ))} */}
             </SectionComponent>
+        </ScrollView>
         {
           isChanged && (  <View style={{position: 'absolute',
                 bottom: 20,
@@ -231,7 +234,8 @@ const TaskDetails = ({ navigation, route }: any) => {
                 <ButtonComponent text='Update' onPress={handleUpdateTask}/>
             </View>)
         }
-        </ScrollView>
+
+        <AddSubTaskModal visible={isVisibleSubTaskModal} onClose={() => setIsVisibleSubTaskModal(false)}/>
         </>
     ) : (
         <></>
