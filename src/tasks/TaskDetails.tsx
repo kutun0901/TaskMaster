@@ -6,7 +6,7 @@ import RowComponent from '../components/RowComponent'
 import { AddSquare, ArrowLeft2, CalendarEdit, Clock, TickCircle } from 'iconsax-react-native'
 import { colors } from '../constants/colors'
 import firestore from '@react-native-firebase/firestore'
-import { Attachment, TaskModel } from '../models/TaskModel'
+import { Attachment, Subtask, TaskModel } from '../models/TaskModel'
 import TitleComponent from '../components/TitleComponent'
 import SpaceComponent from '../components/SpaceComponent'
 import AvatarGroup from '../components/AvatarGroup'
@@ -26,12 +26,13 @@ const TaskDetails = ({ navigation, route }: any) => {
     const [taskDetail, setTaskDetail] = useState<TaskModel>()
     const [progress, setProgress] = useState(0)
     const [attachments, setAttachments] = useState<Attachment[]>([])
-    const [subtasks, setSubTasks] = useState<any[]>([])
+    const [subTasks, setSubTasks] = useState<Subtask[]>([])
     const [isChanged, setIsChanged] = useState(false)
     const [isVisibleSubTaskModal, setIsVisibleSubTaskModal] = useState(false)
 
     useEffect(() => {
         getTaskDetails()
+        getSubTasksById()
     }, [id])
 
     useEffect(() =>{
@@ -65,6 +66,24 @@ const TaskDetails = ({ navigation, route }: any) => {
 
     }
 
+    // when using snapshot, no need to use async await because snapshot always listen to changes
+    const getSubTasksById = () => {
+        firestore().collection('subTasks').where('taskId', '==', id).onSnapshot(snap => {
+            if (snap.empty){
+                console.log('Data not found')
+            }else {
+                const items: Subtask[] = [];
+                snap.forEach((item: any) => {
+                    items.push({
+                        id: item.id,
+                        ...item.data()
+                    });
+                })
+                setSubTasks(items)
+            }
+        })
+    }
+
 
     const handleUpdateTask = async() => {
         const data = {...taskDetail, progress, attachments, updatedAt: Date.now()}
@@ -76,7 +95,16 @@ const TaskDetails = ({ navigation, route }: any) => {
             Alert.alert('Task updated')
         }).catch(error => console.log(error))
     }
+
+    const handleUpdateSubTask = (id: string, isComplete: boolean) => {
+        try {
+            firestore().doc(`subTasks/${id}`).update({isComplete: !isComplete})
+        } catch (error) {
+            console.log(error)
+        }
+    }
     // console.log(taskDetail)
+    // console.log(subTasks)
 
     return taskDetail ? (
         <>
@@ -213,16 +241,21 @@ const TaskDetails = ({ navigation, route }: any) => {
                     </TouchableOpacity>
                 </RowComponent>
                 <SpaceComponent height={12} />
-                {/* {Array.from({ length: 3 }).map((item, index) => (
-                    <CardComponent key={`subtask${index}`} styles={{ marginBottom: 12 }}>
-                        <RowComponent>
-                            <TickCircle variant='Bold' color={colors.success} size={20} />
-                            <SpaceComponent width={8} />
-                            <TextComponent text='fafa' />
-                        </RowComponent>
+                {
+                    subTasks.length > 0 &&
+                         subTasks.map((item, index) => (
+                            <CardComponent key={`subtask${index}`} styles={{ marginBottom: 12 }}>
+                                <RowComponent onPress={() => handleUpdateSubTask(item.id, item.isComplete)}>
+                                    <TickCircle variant={item.isComplete ? 'Bold' : 'Outline'} color={colors.success} size={20} />
+                                    <View style={{flex: 1, marginLeft: 12}}>
+                                    <TextComponent text={item.title} />
+                                    <TextComponent size={12} color='#e0e0e0' text={HandleDateTime.DateString(new Date(item.createdAt))} />
+                                    </View>
+                                </RowComponent>
 
-                    </CardComponent>
-                ))} */}
+                            </CardComponent>
+                        ))
+                }
             </SectionComponent>
         </ScrollView>
         {
@@ -235,7 +268,7 @@ const TaskDetails = ({ navigation, route }: any) => {
             </View>)
         }
 
-        <AddSubTaskModal visible={isVisibleSubTaskModal} onClose={() => setIsVisibleSubTaskModal(false)}/>
+        <AddSubTaskModal taskId={id} visible={isVisibleSubTaskModal} onClose={() => setIsVisibleSubTaskModal(false)}/>
         </>
     ) : (
         <></>
