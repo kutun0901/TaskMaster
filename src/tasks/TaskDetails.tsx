@@ -51,6 +51,14 @@ const TaskDetails = ({ navigation, route }: any) => {
         }
     }, [progress, taskDetail, attachments])
 
+    useEffect(() => {
+        if (subTasks.length > 0){
+            const completedPercent = (subTasks.filter(item => item.isComplete)).length / subTasks.length
+
+            setProgress(completedPercent)
+        }
+    }, [subTasks])
+
     const getTaskDetails = () => {
         firestore().doc(`tasks/${id}`)
             .onSnapshot((snap: any) => {
