@@ -228,6 +228,7 @@ const TaskDetails = ({ navigation, route }: any) => {
                 <RowComponent>
                     <View style={{ flex: 1 }}>
                         <Slider value={progress}
+                        disabled
                         onValueChange={val => setProgress(val[0])}
                         thumbTintColor={colors.success}
                         thumbStyle={{borderWidth: 2, borderColor: colors.white}}
