@@ -1,4 +1,4 @@
-import { View, Text, Button, Platform, PermissionsAndroid } from 'react-native'
+import { View, Platform, PermissionsAndroid, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Container from '../components/Container'
 // import TextComponent from '../components/TextComponent'
@@ -13,13 +13,9 @@ import { selectModel } from '../models/SelectModel'
 import firestore from '@react-native-firebase/firestore'
 import ButtonComponent from '../components/ButtonComponent'
 import TitleComponent from '../components/TitleComponent'
-import { AttachSquare } from 'iconsax-react-native'
-import { colors } from '../constants/colors'
-import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker'
 import TextComponent from '../components/TextComponent'
-import storage from '@react-native-firebase/storage'
-import RNFetchBlob from "rn-fetch-blob";
 import UploadFileComponent from '../components/UploadFileComponent'
+import auth from '@react-native-firebase/auth'
 
 const initValues: TaskModel = {
     title: '',
@@ -28,7 +24,9 @@ const initValues: TaskModel = {
     start: undefined,
     end: undefined,
     uids: [],
-    attachments: []
+    attachments: [],
+    createdAt: Date.now(),
+    updatedAt: Date.now()
 }
 
 const AddNewTask = ({ navigation }: any) => {
@@ -37,10 +35,15 @@ const AddNewTask = ({ navigation }: any) => {
     const [userSelect, setUserSelect] = useState<selectModel[]>([])
     const [attachments, setAttachments] = useState<Attachment[]>([])
 
+    const user = auth().currentUser;
 
     useEffect(() => {
         handleGetAllUsers()
     }, [])
+
+    useEffect(() => {
+        user && setTaskDetail({...taskDetail, uids: [user.uid]})
+    }, [user])
 
     // Handle getting data from firestore
     const handleGetAllUsers = async () => {
@@ -54,7 +57,7 @@ const AddNewTask = ({ navigation }: any) => {
 
                 snapshot.forEach((item) => {
                     items.push({
-                        label: item.data().name,
+                        label: item.data().displayName,
                         value: item.id,
                     });
                 });
@@ -131,17 +134,25 @@ const AddNewTask = ({ navigation }: any) => {
 
 
     const handleAddNewTask = async () => {
-        const data = {
-            ...taskDetail,
-            attachments
+        if (user) {
+            const data = {
+                ...taskDetail,
+                attachments,
+                createdAt: Date.now(),
+                updatedAt: Date.now()
+            }
+
+            await firestore().collection('tasks').add(data).then(() => {
+                console.log('New tasks added')
+                navigation.goBack()
+            }).catch(error => {
+                console.log(error)
+            })
+        } else {
+            Alert.alert('Login is required')
         }
 
-        await firestore().collection('tasks').add(data).then(() => {
-            console.log('New tasks added')
-            navigation.goBack()
-        }).catch(error => {
-            console.log(error)
-        })
+
 
     }
 

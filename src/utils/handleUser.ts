@@ -5,6 +5,7 @@ export class HandleUser {
     static SaveToDB = async (user: FirebaseAuthTypes.User) => {
         const data = {
             email: user.email ?? "",
+            displayName: user.displayName ? user.displayName : user.email ? user.email.split('@')[0] : ''
         }
 
         try {

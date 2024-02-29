@@ -23,12 +23,12 @@ interface Props {
 
 
 const InputComponent = (props: Props) => {
-    const { value, onChange, placeHolder, title, prefix, affix, allowClear, multiple, numberOfLine, isPassword} = props;
+    const { value, onChange, placeHolder, title, prefix, affix, allowClear, multiple, numberOfLine, isPassword } = props;
 
     const [showPassword, setShowPassword] = useState(false)
 
     return (
-        <View style={{ marginBottom: 16 }}>
+        <View style={{ marginBottom: 16, }}>
             {title && <TitleComponent text={title} />}
             <RowComponent styles={[globalStyles.inputContainer,
             {
@@ -36,15 +36,15 @@ const InputComponent = (props: Props) => {
                 minHeight: multiple && numberOfLine ? 32 * numberOfLine : 32,
                 // paddingVertical: 22,
                 paddingHorizontal: 10,
-                alignItems: 'flex-start',
+                alignItems: 'center',
                 // flexDirection: 'row'
 
             }]}>
                 {prefix && prefix}
-                <View style={{ flex: 1 }}>
-                    <TextInput style={[globalStyles.text,
-                    // { margin: 0, paddingVertical: 0, paddingHorizontal: 6, flex: 1}
-                ]}
+                <View style={{ flex: 1, }}>
+                    <TextInput style={[globalStyles.text, {paddingLeft: 8}
+                        // { margin: 0, paddingVertical: 0, paddingHorizontal: 6, flex: 1}
+                    ]}
                         placeholder={placeHolder ?? ""}
                         placeholderTextColor={'#676767'}
                         value={value}
@@ -65,13 +65,13 @@ const InputComponent = (props: Props) => {
                 )}
 
                 {isPassword && <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                    {showPassword? (
-                        <EyeSlash size={20} color={colors.desc}/>
+                    {showPassword ? (
+                        <EyeSlash size={20} color={colors.desc} />
                     ) : (
-                        <Eye size={20} color={colors.desc}/>
+                        <Eye size={20} color={colors.desc} />
                     )}
 
-                    </TouchableOpacity>}
+                </TouchableOpacity>}
             </RowComponent>
         </View>
     )
