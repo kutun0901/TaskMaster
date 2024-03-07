@@ -131,7 +131,7 @@ const TaskDetails = ({ navigation, route }: any) => {
                         <ArrowLeft2 size={28} color={colors.text} style={{ marginTop: -8, marginRight: 12 }} />
                     </TouchableOpacity>
                     <SpaceComponent width={12} />
-                    <TitleComponent text={taskDetail.title} size={20} flex={1} styles={{ marginBottom: 0 }} />
+                    <TitleComponent line={1} text={taskDetail.title} size={20} flex={1} styles={{ marginBottom: 0 }} />
                 </RowComponent>
                 <SpaceComponent height={30} />
                 <TextComponent text='Due date' />

@@ -38,8 +38,13 @@ const HomeScreen = ({ navigation }: any) => {
     .collection('tasks')
     .orderBy('dueDate')
     .where('uids', 'array-contains', user?.uid)
-    .limit(3)
+    .limitToLast(3)
     .onSnapshot(snap => {
+
+      // if the onSnapshot event listener is being triggered before the initial snapshot
+      // has been received from Firestore. To handle this situation, you can check if snap is not null
+      // before accessing its properties.
+
       if (snap) {
         if (snap.empty) {
           console.log('tasks not found');
@@ -116,7 +121,10 @@ const HomeScreen = ({ navigation }: any) => {
                     (<CardImage onPress={() => navigation.navigate('TaskDetails', {
                       id: tasks[0].id,
                     })}>
-                      <TouchableOpacity onPress={() => { }} style={globalStyles.iconContainer}>
+                      <TouchableOpacity onPress={() => navigation.navigate('AddNewTask', {
+                        editable: true,
+                        task: tasks[0]
+                      })} style={globalStyles.iconContainer}>
                         <Edit2 size={20} color={colors.white} />
                       </TouchableOpacity>
                       <TitleComponent text={tasks[0].title} />
@@ -140,7 +148,10 @@ const HomeScreen = ({ navigation }: any) => {
                       color: 'rgba(33, 150, 243, 0.9)'
                     })}
                     color='rgba(33, 150, 243, 0.9)'>
-                      <TouchableOpacity onPress={() => { }} style={globalStyles.iconContainer}>
+                      <TouchableOpacity onPress={() => navigation.navigate('AddNewTask', {
+                        editable: true,
+                        task: tasks[1]
+                      })} style={globalStyles.iconContainer}>
                         <Edit2 size={20} color={colors.white} />
                       </TouchableOpacity>
                       <TitleComponent text={tasks[1].title} size={18} />
@@ -159,7 +170,10 @@ const HomeScreen = ({ navigation }: any) => {
                       color: 'rgba(18, 181, 22, 0.9))'
                     })}
                     color='rgba(18, 181, 22, 0.9)'>
-                      <TouchableOpacity onPress={() => { }} style={globalStyles.iconContainer}>
+                      <TouchableOpacity onPress={() => navigation.navigate('AddNewTask', {
+                        editable: true,
+                        task: tasks[2]
+                      })} style={globalStyles.iconContainer}>
                         <Edit2 size={20} color={colors.white} />
                       </TouchableOpacity>
                       <TitleComponent text={tasks[2].title} />

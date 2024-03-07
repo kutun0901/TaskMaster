@@ -29,13 +29,17 @@ const initValues: TaskModel = {
     updatedAt: Date.now()
 }
 
-const AddNewTask = ({ navigation }: any) => {
+const AddNewTask = ({ navigation, route }: any) => {
+
+    const {editable, task} : {editable: boolean; task?: TaskModel} = route.params;
 
     const [taskDetail, setTaskDetail] = useState<TaskModel>(initValues)
     const [userSelect, setUserSelect] = useState<selectModel[]>([])
     const [attachments, setAttachments] = useState<Attachment[]>([])
 
     const user = auth().currentUser;
+
+    // console.log(editable, task)
 
     useEffect(() => {
         handleGetAllUsers()
@@ -44,6 +48,15 @@ const AddNewTask = ({ navigation }: any) => {
     useEffect(() => {
         user && setTaskDetail({...taskDetail, uids: [user.uid]})
     }, [user])
+
+    useEffect(() => {
+        task && setTaskDetail({
+            ...taskDetail,
+            title: task.title,
+            description: task.description,
+            uids: task.uids,
+        })
+    }, [task])
 
     // Handle getting data from firestore
     const handleGetAllUsers = async () => {
@@ -138,16 +151,23 @@ const AddNewTask = ({ navigation }: any) => {
             const data = {
                 ...taskDetail,
                 attachments,
-                createdAt: Date.now(),
+                createdAt: task ? task.createdAt : Date.now(),
                 updatedAt: Date.now()
             }
 
-            await firestore().collection('tasks').add(data).then(() => {
-                console.log('New tasks added')
-                navigation.goBack()
-            }).catch(error => {
-                console.log(error)
-            })
+            if (task) {
+                await firestore().doc(`tasks/${task.id}`).update(data).then(() => {
+                    console.log('New tasks added')
+                    navigation.goBack()
+                })
+            } else {
+                await firestore().collection('tasks').add(data).then(() => {
+                    console.log('New tasks added')
+                    navigation.goBack()
+                }).catch(error => {
+                    console.log(error)
+                })
+            }
         } else {
             Alert.alert('Login is required')
         }
@@ -228,7 +248,7 @@ const AddNewTask = ({ navigation }: any) => {
 
 
             <SectionComponent>
-                <ButtonComponent text='Save' onPress={handleAddNewTask} />
+                <ButtonComponent text={task ? 'Update' : 'Save'} onPress={handleAddNewTask} />
             </SectionComponent>
         </Container>
     );
