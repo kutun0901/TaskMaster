@@ -37,21 +37,25 @@ const HomeScreen = ({ navigation }: any) => {
     await firestore()
     .collection('tasks')
     .orderBy('dueDate')
-    .limitToLast(3)
+    .where('uids', 'array-contains', user?.uid)
+    .limit(3)
     .onSnapshot(snap => {
-      if (snap.empty) {
-        console.log('tasks not found')
+      if (snap) {
+        if (snap.empty) {
+          console.log('tasks not found');
+        } else {
+          const items: TaskModel[] = [];
+          snap.forEach((item: any) =>
+            items.push({
+              id: item.id,
+              ...item.data(),
+            })
+          );
+          setIsLoading(false);
+          setTasks(items);
+        }
       } else {
-        const items: TaskModel[] = [];
-        snap.forEach((item: any) =>
-          items.push({
-            id: item.id,
-            ...item.data(),
-          })
-        )
-
-        setIsLoading(false);
-        setTasks(items)
+        console.log('Snapshot is null');
       }
     })
   }
