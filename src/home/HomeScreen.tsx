@@ -155,7 +155,7 @@ const HomeScreen = ({ navigation }: any) => {
                         <Edit2 size={20} color={colors.white} />
                       </TouchableOpacity>
                       <TitleComponent text={tasks[1].title} size={18} />
-                      <TextComponent text={tasks[1].description} />
+                      <TextComponent text={tasks[1].description} line={3} />
                       <AvatarGroup uids={tasks[1].uids} />
                       {tasks[1].progress && (tasks[1].progress as number) >= 0 ? (
                         <ProgressBarComponent percent={`${Math.floor(tasks[1].progress * 100)}%`} color='#A2F068' />
@@ -177,7 +177,7 @@ const HomeScreen = ({ navigation }: any) => {
                         <Edit2 size={20} color={colors.white} />
                       </TouchableOpacity>
                       <TitleComponent text={tasks[2].title} />
-                      <TextComponent text={tasks[2].description} size={13} />
+                      <TextComponent text={tasks[2].description} size={13} line={3}/>
                     </CardImage>
                   )}
                 </View>

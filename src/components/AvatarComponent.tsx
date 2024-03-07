@@ -35,7 +35,7 @@ const AvatarComponent = (props: Props) => {
         borderWidth: 2,
         borderColor: colors.white
     }
-    console.log(userDetail)
+    // console.log(userDetail)
 
   return userDetail ? (
   userDetail.imgUrl ?  (

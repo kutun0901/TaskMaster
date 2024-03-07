@@ -3,7 +3,7 @@ import SectionComponent from '../components/SectionComponent'
 import TextComponent from '../components/TextComponent'
 import { Alert, ScrollView, TouchableOpacity, View } from 'react-native'
 import RowComponent from '../components/RowComponent'
-import { AddSquare, ArrowLeft2, CalendarEdit, Clock, TickCircle } from 'iconsax-react-native'
+import { AddSquare, ArrowLeft2, CalendarEdit, Clock, TickCircle, TickSquare } from 'iconsax-react-native'
 import { colors } from '../constants/colors'
 import firestore from '@react-native-firebase/firestore'
 import { Attachment, Subtask, TaskModel } from '../models/TaskModel'
@@ -29,6 +29,7 @@ const TaskDetails = ({ navigation, route }: any) => {
     const [subTasks, setSubTasks] = useState<Subtask[]>([])
     const [isChanged, setIsChanged] = useState(false)
     const [isVisibleSubTaskModal, setIsVisibleSubTaskModal] = useState(false)
+    const [isUrgent, setIsUrgent] = useState(taskDetail?.isUrgent)
 
     useEffect(() => {
         getTaskDetails()
@@ -58,6 +59,14 @@ const TaskDetails = ({ navigation, route }: any) => {
             setProgress(completedPercent)
         }
     }, [subTasks])
+
+    useEffect(() => {
+        firestore().doc(`tasks/${id}`)
+        .update({
+            isUrgent: isUrgent ?? false,
+            updateAt: Date.now()
+        })
+    }, [isUrgent])
 
     const getTaskDetails = () => {
         firestore().doc(`tasks/${id}`)
@@ -175,6 +184,13 @@ const TaskDetails = ({ navigation, route }: any) => {
                     <TextComponent text={taskDetail.description} />
                 </CardComponent>
             </SectionComponent>
+            <SectionComponent>
+                <RowComponent onPress={() => setIsUrgent(!isUrgent)}>
+                    <TickSquare variant={isUrgent ? 'Bold' : 'Outline'} size={24} color={colors.white}/>
+                    <SpaceComponent width={8} />
+                    <TextComponent text='Is Urgent' flex={1} font={fontFamilies.bold} size={18} />
+                </RowComponent>
+                </SectionComponent>
             <SectionComponent>
                 {/* <CardComponent>
                     <RowComponent>

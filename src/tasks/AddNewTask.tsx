@@ -26,7 +26,8 @@ const initValues: TaskModel = {
     uids: [],
     attachments: [],
     createdAt: Date.now(),
-    updatedAt: Date.now()
+    updatedAt: Date.now(),
+    isUrgent: false
 }
 
 const AddNewTask = ({ navigation, route }: any) => {
@@ -155,9 +156,12 @@ const AddNewTask = ({ navigation, route }: any) => {
                 updatedAt: Date.now()
             }
 
+            Object.keys(data).forEach(key => data[key] === undefined && delete data[key]);
+
+
             if (task) {
                 await firestore().doc(`tasks/${task.id}`).update(data).then(() => {
-                    console.log('New tasks added')
+                    console.log('tasks updated')
                     navigation.goBack()
                 })
             } else {
@@ -171,8 +175,6 @@ const AddNewTask = ({ navigation, route }: any) => {
         } else {
             Alert.alert('Login is required')
         }
-
-
 
     }
 
