@@ -29,7 +29,7 @@ const TaskDetails = ({ navigation, route }: any) => {
     const [subTasks, setSubTasks] = useState<Subtask[]>([])
     const [isChanged, setIsChanged] = useState(false)
     const [isVisibleSubTaskModal, setIsVisibleSubTaskModal] = useState(false)
-    const [isUrgent, setIsUrgent] = useState(taskDetail?.isUrgent)
+    const [isUrgent, setIsUrgent] = useState(false)
 
     useEffect(() => {
         getTaskDetails()
@@ -40,8 +40,8 @@ const TaskDetails = ({ navigation, route }: any) => {
         if(taskDetail){
             setProgress(taskDetail.progress ?? 0)
             setAttachments(taskDetail.attachments)
+            setIsUrgent(taskDetail.isUrgent);
         }
-
     }, [taskDetail])
 
     useEffect(() => {
@@ -60,13 +60,13 @@ const TaskDetails = ({ navigation, route }: any) => {
         }
     }, [subTasks])
 
-    useEffect(() => {
+    const handleUpdateUrgentTask = () => {
         firestore().doc(`tasks/${id}`)
         .update({
-            isUrgent: isUrgent ?? false,
+            isUrgent: !isUrgent,
             updateAt: Date.now()
         })
-    }, [isUrgent])
+    }
 
     const getTaskDetails = () => {
         firestore().doc(`tasks/${id}`)
@@ -185,7 +185,7 @@ const TaskDetails = ({ navigation, route }: any) => {
                 </CardComponent>
             </SectionComponent>
             <SectionComponent>
-                <RowComponent onPress={() => setIsUrgent(!isUrgent)}>
+                <RowComponent onPress={handleUpdateUrgentTask}>
                     <TickSquare variant={isUrgent ? 'Bold' : 'Outline'} size={24} color={colors.white}/>
                     <SpaceComponent width={8} />
                     <TextComponent text='Is Urgent' flex={1} font={fontFamilies.bold} size={18} />

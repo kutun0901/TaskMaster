@@ -26,41 +26,60 @@ const HomeScreen = ({ navigation }: any) => {
   const user = auth().currentUser;
   const [isLoading, setIsLoading] = useState(false);
   const [tasks, setTasks] = useState<TaskModel[]>([])
+  const [urgentTask, setUrgentTask] = useState<TaskModel[]>([])
 
   useEffect(() => {
     getNewTasks();
-  }, []);
+    getUrgentTasks();
+  }, [user]);
 
   const getNewTasks = async () => {
     setIsLoading(true);
 
     await firestore()
-    .collection('tasks')
-    .orderBy('dueDate')
-    .where('uids', 'array-contains', user?.uid)
-    .limitToLast(3)
-    .onSnapshot(snap => {
+      .collection('tasks')
+      .where('uids', 'array-contains', user?.uid)
+      .limit(3)
+      .onSnapshot(snap => {
 
-      // if the onSnapshot event listener is being triggered before the initial snapshot
-      // has been received from Firestore. To handle this situation, you can check if snap is not null
-      // before accessing its properties.
+        // if the onSnapshot event listener is being triggered before the initial snapshot
+        // has been received from Firestore. To handle this situation, you can check if snap is not null
+        // before accessing its properties.
 
-      if (snap) {
-        if (snap.empty) {
-          console.log('tasks not found');
-        } else {
-          const items: TaskModel[] = [];
-          snap.forEach((item: any) =>
-            items.push({
-              id: item.id,
-              ...item.data(),
-            })
-          );
-          setIsLoading(false);
-          setTasks(items);
+        if (snap) {
+          if (snap.empty) {
+            console.log('tasks not found');
+          } else {
+            const items: TaskModel[] = [];
+            snap.forEach((item: any) =>
+              items.push({
+                id: item.id,
+                ...item.data(),
+              })
+            );
+            setIsLoading(false);
+            setTasks(items);
+          }
         }
+
+      })
+  }
+
+  const getUrgentTasks = () => {
+    const filter = firestore().collection('tasks').where('uids', 'array-contains', user?.uid).where('isUrgent', '==', true);
+
+    filter.onSnapshot(snap => {
+      if (!snap.empty) {
+        const items: TaskModel[] = [];
+        snap.forEach((item: any) => {
+          items.push({
+            id: item.id,
+            ...item.data(),
+          })
+        })
+        setUrgentTask(items)
       } else {
-        console.log('Snapshot is null');
+        setUrgentTask([])
       }
     })
   }
@@ -147,7 +166,7 @@ const HomeScreen = ({ navigation }: any) => {
                       id: tasks[1].id,
                       color: 'rgba(33, 150, 243, 0.9)'
                     })}
-                    color='rgba(33, 150, 243, 0.9)'>
+                      color='rgba(33, 150, 243, 0.9)'>
                       <TouchableOpacity onPress={() => navigation.navigate('AddNewTask', {
                         editable: true,
                         task: tasks[1]
@@ -159,7 +178,7 @@ const HomeScreen = ({ navigation }: any) => {
                       <AvatarGroup uids={tasks[1].uids} />
                       {tasks[1].progress && (tasks[1].progress as number) >= 0 ? (
                         <ProgressBarComponent percent={`${Math.floor(tasks[1].progress * 100)}%`} color='#A2F068' />
-                      ): null}
+                      ) : null}
 
                     </CardImage>
                   )}
@@ -169,7 +188,7 @@ const HomeScreen = ({ navigation }: any) => {
                       id: tasks[2].id,
                       color: 'rgba(18, 181, 22, 0.9))'
                     })}
-                    color='rgba(18, 181, 22, 0.9)'>
+                      color='rgba(18, 181, 22, 0.9)'>
                       <TouchableOpacity onPress={() => navigation.navigate('AddNewTask', {
                         editable: true,
                         task: tasks[2]
@@ -177,7 +196,7 @@ const HomeScreen = ({ navigation }: any) => {
                         <Edit2 size={20} color={colors.white} />
                       </TouchableOpacity>
                       <TitleComponent text={tasks[2].title} />
-                      <TextComponent text={tasks[2].description} size={13} line={3}/>
+                      <TextComponent text={tasks[2].description} size={13} line={3} />
                     </CardImage>
                   )}
                 </View>
@@ -189,18 +208,21 @@ const HomeScreen = ({ navigation }: any) => {
         <SpaceComponent height={16} />
         <SectionComponent>
           <TitleComponent text='Urgent tasks' />
-          <CardComponent>
-            <RowComponent>
-              <CircularComponent value={40} radius={40} />
-              <View style={{
-                flex: 1,
-                justifyContent: 'center',
-                paddingLeft: 16,
-              }}>
-                <TextComponent text='Report UI/UX' />
-              </View>
-            </RowComponent>
-          </CardComponent>
+          {urgentTask.length > 0 && urgentTask.map(item => (
+            <CardComponent key={item.id}>
+              <RowComponent>
+                <CircularComponent value={40} radius={40} />
+                <View style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  paddingLeft: 16,
+                }}>
+                  <TextComponent text={item.title} />
+                </View>
+              </RowComponent>
+            </CardComponent>
+          ))}
+
         </SectionComponent>
       </Container>
       <View style={{
