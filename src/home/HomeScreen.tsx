@@ -29,17 +29,23 @@ const HomeScreen = ({ navigation }: any) => {
   const [urgentTask, setUrgentTask] = useState<TaskModel[]>([])
 
   useEffect(() => {
-    getNewTasks();
-    getUrgentTasks();
+    getTasks();
   }, []);
 
-  const getNewTasks = async () => {
+  useEffect(() => {
+    if (tasks.length) {
+      const items = tasks.filter(element => element.isUrgent)
+
+      setUrgentTask(items)
+    }
+  }, [tasks])
+
+  const getTasks = async () => {
     setIsLoading(true);
 
     await firestore()
       .collection('tasks')
       .where('uids', 'array-contains', user?.uid)
-      .limit(3)
       .onSnapshot(snap => {
 
         // if the onSnapshot event listener is being triggered before the initial snapshot
@@ -57,32 +63,19 @@ const HomeScreen = ({ navigation }: any) => {
                 ...item.data(),
               })
             );
-            setIsLoading(false);
-            setTasks(items);
+            setTasks(items.sort((a, b) => b.createdAt - a.createdAt));
           }
+          setIsLoading(false);
         }
 
       })
   }
 
-  const getUrgentTasks = () => {
-    const filter = firestore().collection('tasks').where('uids', 'array-contains', user?.uid).where('isUrgent', '==', true);
-
-    filter.onSnapshot(snap => {
-      if (!snap.empty) {
-        const items: TaskModel[] = [];
-        snap.forEach((item: any) => {
-          items.push({
-            id: item.id,
-            ...item.data(),
-          })
-        })
-        setUrgentTask(items)
-      } else {
-        setUrgentTask([])
-      }
-    })
-  }
+  const handleMoveToTaskDetail = (id?: string, color?: string) =>
+    navigation.navigate('TaskDetails', {
+      id,
+      color,
+    });
 
   return (
     <View style={{ flex: 1 }}>
@@ -137,9 +130,7 @@ const HomeScreen = ({ navigation }: any) => {
               <RowComponent styles={{ alignItems: 'flex-start' }}>
                 <View style={{ flex: 1 }}>
                   {tasks[0] &&
-                    (<CardImage onPress={() => navigation.navigate('TaskDetails', {
-                      id: tasks[0].id,
-                    })}>
+                    (<CardImage onPress={handleMoveToTaskDetail(tasks[0].id as string)}>
                       <TouchableOpacity onPress={() => navigation.navigate('AddNewTask', {
                         editable: true,
                         task: tasks[0]
@@ -162,10 +153,7 @@ const HomeScreen = ({ navigation }: any) => {
                 <SpaceComponent width={16} />
                 <View style={{ flex: 1 }}>
                   {tasks[1] && (
-                    <CardImage onPress={() => navigation.navigate('TaskDetails', {
-                      id: tasks[1].id,
-                      color: 'rgba(33, 150, 243, 0.9)'
-                    })}
+                    <CardImage onPress={handleMoveToTaskDetail(tasks[1].id as string,'rgba(33, 150, 243, 0.9)')}
                       color='rgba(33, 150, 243, 0.9)'>
                       <TouchableOpacity onPress={() => navigation.navigate('AddNewTask', {
                         editable: true,
@@ -184,10 +172,7 @@ const HomeScreen = ({ navigation }: any) => {
                   )}
                   <SpaceComponent height={16} />
                   {tasks[2] && (
-                    <CardImage onPress={() => navigation.navigate('TaskDetails', {
-                      id: tasks[2].id,
-                      color: 'rgba(18, 181, 22, 0.9))'
-                    })}
+                    <CardImage onPress={handleMoveToTaskDetail(tasks[2].id as string, 'rgba(18, 181, 22, 0.9))')}
                       color='rgba(18, 181, 22, 0.9)'>
                       <TouchableOpacity onPress={() => navigation.navigate('AddNewTask', {
                         editable: true,
@@ -236,7 +221,10 @@ const HomeScreen = ({ navigation }: any) => {
       }}>
         <TouchableOpacity
           activeOpacity={1}
-          onPress={() => navigation.navigate('AddNewTask')}
+          onPress={() => navigation.navigate('AddNewTask', {
+            editable: false,
+            task: undefined,
+          })}
           style={[globalStyles.row, {
             backgroundColor: colors.blue,
             padding: 10,
