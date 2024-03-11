@@ -31,7 +31,7 @@ const HomeScreen = ({ navigation }: any) => {
   useEffect(() => {
     getNewTasks();
     getUrgentTasks();
-  }, [user]);
+  }, []);
 
   const getNewTasks = async () => {
     setIsLoading(true);
@@ -150,13 +150,13 @@ const HomeScreen = ({ navigation }: any) => {
                       <TextComponent line={3} text={tasks[0].description} size={13} />
                       <View style={{ marginVertical: 28 }}>
                         <AvatarGroup uids={tasks[0].uids} />
-                        {tasks[0].progress && (tasks[0].progress as number) >= 0 ? (
+                        {tasks[0].progress || tasks[0].progress === 0 && (tasks[0].progress as number) >= 0 ? (
                           <ProgressBarComponent percent={`${Math.floor(tasks[0].progress * 100)}%`} color='#0AACFF' size='large' />
                         ) : null}
                       </View>
-                      <TextComponent text={`Due ${new Date(tasks[0].dueDate.toDate())}`} size={12} color={colors.desc} />
+                      <TextComponent text={`Due ${tasks[0]?.dueDate?.toDate() ? new Date(tasks[0].dueDate.toDate()) : 'Unknown'}`}
+                        size={12} color={colors.desc} />
                     </CardImage>)
-
                   }
                 </View>
                 <SpaceComponent width={16} />
@@ -176,7 +176,7 @@ const HomeScreen = ({ navigation }: any) => {
                       <TitleComponent text={tasks[1].title} size={18} />
                       <TextComponent text={tasks[1].description} line={3} />
                       <AvatarGroup uids={tasks[1].uids} />
-                      {tasks[1].progress && (tasks[1].progress as number) >= 0 ? (
+                      {tasks[1].progress || tasks[1].progress === 0 && (tasks[1].progress as number) >= 0 ? (
                         <ProgressBarComponent percent={`${Math.floor(tasks[1].progress * 100)}%`} color='#A2F068' />
                       ) : null}
 
@@ -211,7 +211,7 @@ const HomeScreen = ({ navigation }: any) => {
           {urgentTask.length > 0 && urgentTask.map(item => (
             <CardComponent key={item.id}>
               <RowComponent>
-                <CircularComponent value={40} radius={40} />
+                <CircularComponent value={item.progress ? item.progress * 100 : 0} radius={40} />
                 <View style={{
                   flex: 1,
                   justifyContent: 'center',
