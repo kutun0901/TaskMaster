@@ -130,7 +130,7 @@ const HomeScreen = ({ navigation }: any) => {
               <RowComponent styles={{ alignItems: 'flex-start' }}>
                 <View style={{ flex: 1 }}>
                   {tasks[0] &&
-                    (<CardImage onPress={handleMoveToTaskDetail(tasks[0].id as string)}>
+                    (<CardImage onPress={() => handleMoveToTaskDetail(tasks[0].id as string)}>
                       <TouchableOpacity onPress={() => navigation.navigate('AddNewTask', {
                         editable: true,
                         task: tasks[0]
@@ -153,7 +153,7 @@ const HomeScreen = ({ navigation }: any) => {
                 <SpaceComponent width={16} />
                 <View style={{ flex: 1 }}>
                   {tasks[1] && (
-                    <CardImage onPress={handleMoveToTaskDetail(tasks[1].id as string,'rgba(33, 150, 243, 0.9)')}
+                    <CardImage onPress={() => handleMoveToTaskDetail(tasks[1].id as string,'rgba(33, 150, 243, 0.9)')}
                       color='rgba(33, 150, 243, 0.9)'>
                       <TouchableOpacity onPress={() => navigation.navigate('AddNewTask', {
                         editable: true,
@@ -172,7 +172,7 @@ const HomeScreen = ({ navigation }: any) => {
                   )}
                   <SpaceComponent height={16} />
                   {tasks[2] && (
-                    <CardImage onPress={handleMoveToTaskDetail(tasks[2].id as string, 'rgba(18, 181, 22, 0.9))')}
+                    <CardImage onPress={() => handleMoveToTaskDetail(tasks[2].id as string, 'rgba(18, 181, 22, 0.9))')}
                       color='rgba(18, 181, 22, 0.9)'>
                       <TouchableOpacity onPress={() => navigation.navigate('AddNewTask', {
                         editable: true,
@@ -194,7 +194,7 @@ const HomeScreen = ({ navigation }: any) => {
         <SectionComponent>
           <TitleComponent text='Urgent tasks' />
           {urgentTask.length > 0 && urgentTask.map(item => (
-            <CardComponent key={item.id}>
+            <CardComponent key={item.id} onPress={() => handleMoveToTaskDetail(item.id as string)}>
               <RowComponent>
                 <CircularComponent value={item.progress ? item.progress * 100 : 0} radius={40} />
                 <View style={{
