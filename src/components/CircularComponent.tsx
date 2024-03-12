@@ -23,7 +23,9 @@ const CircularComponent = (props: Props) => {
     inActiveStrokeColor={colors.gray2}
     titleColor={colors.text}
     titleFontSize={22}
-    titleStyle={{fontFamily: fontFamilies.semiBold}}
+    titleStyle={{fontFamily: fontFamilies.semiBold,
+      fontSize: 18
+    }}
     />
   )
 }
