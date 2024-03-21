@@ -8,7 +8,7 @@ import SectionComponent from '../components/SectionComponent'
 import { fontFamilies } from '../constants/fontFamilies'
 import TitleComponent from '../components/TitleComponent'
 import CardComponent from '../components/CardComponent'
-import { Add, Card, Edit2, Element4, Logout, Notification, SearchNormal1 } from 'iconsax-react-native'
+import { Add, AlignBottom, Card, Edit2, Element4, Logout, Notification, SearchNormal1 } from 'iconsax-react-native'
 import { colors } from '../constants/colors'
 import TagComponent from '../components/TagComponent'
 import SpaceComponent from '../components/SpaceComponent'
@@ -106,24 +106,28 @@ const HomeScreen = ({ navigation }: any) => {
 
         </SectionComponent>
         <SectionComponent>
-          <RowComponent styles={[globalStyles.inputContainer]} onPress={() => navigation.navigate('SearchScreen')}>
+          <RowComponent styles={[globalStyles.inputContainer]} onPress={() => navigation.navigate('ListTasks', {
+                tasks: tasks
+              })}>
             <TextComponent color='#696B6F' text='Search Task' />
             <SearchNormal1 size={20} color={colors.desc} />
           </RowComponent>
         </SectionComponent>
         <SectionComponent>
-          <CardComponent>
+          <CardComponent onPress={() => navigation.navigate('ListTasks', {
+                tasks: tasks
+              })}>
             <RowComponent>
               <View style={{ flex: 1 }}>
                 <TitleComponent text='Task Progress' />
-                <TextComponent text='20/40 tasks done' />
+                <TextComponent text={`${tasks.filter(element => element.progress && element.progress === 1).length}/${tasks.length}`} />
                 <SpaceComponent height={7} />
                 <RowComponent justify='flex-start'>
                   <TagComponent text={`${monthNames[date.getMonth()]} ${add0ToNumber(date.getDate())}`} />
                 </RowComponent>
               </View>
               <View>
-                <CircularComponent value={20} />
+                <CircularComponent value={Math.floor((tasks.filter(element => element.progress && element.progress === 1).length/tasks.length) * 100)} />
               </View>
             </RowComponent>
           </CardComponent>
@@ -131,6 +135,15 @@ const HomeScreen = ({ navigation }: any) => {
         {
           isLoading ? <ActivityIndicator /> : tasks.length > 0 ? (
             <SectionComponent>
+              <RowComponent onPress={() => navigation.navigate('ListTasks', {
+                tasks: tasks
+              })}
+              justify='flex-end' styles={{
+                  marginBottom: 16,
+              }}>
+                <TextComponent size={16}
+                text='See all' flex={0}/>
+                </RowComponent>
               <RowComponent styles={{ alignItems: 'flex-start' }}>
                 <View style={{ flex: 1 }}>
                   {tasks[0] &&
