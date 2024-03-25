@@ -22,6 +22,7 @@ import firestore from '@react-native-firebase/firestore'
 import { TaskModel } from '../models/TaskModel'
 import { monthNames } from '../constants/appInfos'
 import { add0ToNumber } from '../utils/add0ToNumber'
+import { HandleNotification } from '../utils/handleNotification'
 
 const date = new Date()
 
@@ -34,6 +35,7 @@ const HomeScreen = ({ navigation }: any) => {
 
   useEffect(() => {
     getTasks();
+    HandleNotification.checkNotificationPermission();
   }, []);
 
   useEffect(() => {
