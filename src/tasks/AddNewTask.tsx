@@ -33,7 +33,7 @@ const initValues: TaskModel = {
 
 const AddNewTask = ({ navigation, route }: any) => {
 
-    const {editable, task} : {editable: boolean; task?: TaskModel} = route.params;
+    const { editable, task }: { editable: boolean; task?: TaskModel } = route.params;
 
     const [taskDetail, setTaskDetail] = useState<TaskModel>(initValues)
     const [userSelect, setUserSelect] = useState<selectModel[]>([])
@@ -48,7 +48,7 @@ const AddNewTask = ({ navigation, route }: any) => {
     }, [])
 
     useEffect(() => {
-        user && setTaskDetail({...taskDetail, uids: [user.uid]})
+        user && setTaskDetail({ ...taskDetail, uids: [user.uid] })
     }, [user])
 
     useEffect(() => {
@@ -162,27 +162,40 @@ const AddNewTask = ({ navigation, route }: any) => {
 
             if (task) {
                 await firestore().doc(`tasks/${task.id}`)
-                .update(data).then(() => {
-                    if (userSelect.length > 0) {
-                        userSelect.forEach(member => {
-                          member.value !== user.uid &&
-                            HandleNotification.sendNotification({
-                              title: 'Update task',
-                              body: `Your task updated by ${user?.email}`,
-                              taskId: task?.id ?? '',
-                              memberId: member.value,
+                    .update(data).then(() => {
+                        if (userSelect.length > 0) {
+                            userSelect.forEach(member => {
+                                member.value !== user.uid &&
+                                    HandleNotification.sendNotification({
+                                        title: 'Update task',
+                                        body: `Your task has been updated by ${user?.email}`,
+                                        taskId: task?.id ?? '',
+                                        memberId: member.value,
+                                    });
                             });
-                        });
-                      }
-                      navigation.goBack();
+                        }
+                        navigation.goBack();
                     });
             } else {
-                await firestore().collection('tasks').add(data).then(() => {
-                    console.log('New tasks added')
-                    navigation.goBack()
-                }).catch(error => {
-                    console.log(error)
-                })
+                await firestore()
+                    .collection('tasks')
+                    .add(data)
+                    .then(snap => {
+                        if (userSelect.length > 0) {
+                            userSelect.forEach(member => {
+                                member.value !== user.uid &&
+                                    HandleNotification.sendNotification({
+                                        title: 'New task',
+                                        body: `You have a new task assigned by ${user?.email}`,
+                                        taskId: snap.id,
+                                        memberId: member.value,
+                                    });
+                            });
+                        }
+                        navigation.goBack();
+                    }).catch(error => {
+                        console.log(error)
+                    })
             }
         } else {
             Alert.alert('Login is required')

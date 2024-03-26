@@ -134,12 +134,21 @@ const TaskDetails = ({ navigation, route }: any) => {
                 style: 'destructive',
                 onPress: async () => {
                     await firestore().doc(`tasks/${id}`)
-                    .delete()
-                    .then(() => {
-                        navigation.goBack();
-                    }).catch(error => {
-                        console.log(error)
-                    })
+                        .delete()
+                        .then(() => {
+                            taskDetail?.uids.forEach(id => {
+                                HandleNotification.SendNotification({
+                                    title: 'Delete task',
+                                    body: `You task deleted by ${user?.email}`,
+                                    taskId: '',
+                                    memberId: id,
+                                });
+                            });
+
+                            navigation.goBack();
+                        }).catch(error => {
+                            console.log(error)
+                        })
                 }
             }
         ])
