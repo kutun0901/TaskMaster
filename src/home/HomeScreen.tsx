@@ -129,7 +129,9 @@ const HomeScreen = ({ navigation }: any) => {
                 </RowComponent>
               </View>
               <View>
-                <CircularComponent value={Math.floor((tasks.filter(element => element.progress && element.progress === 1).length/tasks.length) * 100)} />
+                {tasks.length > 0 && (
+                  <CircularComponent value={Math.floor((tasks.filter(element => element.progress && element.progress === 1).length/tasks.length) * 100)} />
+                )}
               </View>
             </RowComponent>
           </CardComponent>
