@@ -2,6 +2,7 @@ import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore'
 import messaging from '@react-native-firebase/messaging'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { serviceKey } from '../constants/appInfos';
 
 const user = auth().currentUser;
 
@@ -46,5 +47,50 @@ export class HandleNotification{
                 }
             }
         })
+    }
+
+    static sendNotification = async ({
+        memberId, title, body, taskId
+    } : {
+        memberId: string;
+        title: string;
+        body: string;
+        taskId: string;
+    }) => {
+        try {
+            // send notification
+      const member: any = await firestore().doc(`users/${memberId}`).get();
+
+      if (member && member.data().tokens) {
+        var myHeaders = new Headers();
+        myHeaders.append('Content-Type', 'application/json');
+        myHeaders.append('Authorization', `key=${serviceKey}`);
+
+        var raw = JSON.stringify({
+          registration_ids: member.data().tokens,
+          notification: {
+            title,
+            body,
+          },
+          data: {
+            taskId,
+          },
+        });
+
+        var requestOptions: any = {
+          method: 'POST',
+          headers: myHeaders,
+          body: raw,
+          redirect: 'follow',
+        };
+
+        fetch('https://fcm.googleapis.com/fcm/send', requestOptions)
+          .then(response => response.text())
+          .then(result => console.log(result))
+          .catch(error => console.log('error', error));
+      }
+        } catch (error) {
+            console.log(error)
+        }
     }
 }

@@ -16,6 +16,7 @@ import TitleComponent from '../components/TitleComponent'
 import TextComponent from '../components/TextComponent'
 import UploadFileComponent from '../components/UploadFileComponent'
 import auth from '@react-native-firebase/auth'
+import { HandleNotification } from '../utils/handleNotification'
 
 const initValues: TaskModel = {
     title: '',
@@ -160,10 +161,21 @@ const AddNewTask = ({ navigation, route }: any) => {
 
 
             if (task) {
-                await firestore().doc(`tasks/${task.id}`).update(data).then(() => {
-                    console.log('tasks updated')
-                    navigation.goBack()
-                })
+                await firestore().doc(`tasks/${task.id}`)
+                .update(data).then(() => {
+                    if (userSelect.length > 0) {
+                        userSelect.forEach(member => {
+                          member.value !== user.uid &&
+                            HandleNotification.sendNotification({
+                              title: 'Update task',
+                              body: `Your task updated by ${user?.email}`,
+                              taskId: task?.id ?? '',
+                              memberId: member.value,
+                            });
+                        });
+                      }
+                      navigation.goBack();
+                    });
             } else {
                 await firestore().collection('tasks').add(data).then(() => {
                     console.log('New tasks added')
