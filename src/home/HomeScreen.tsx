@@ -90,7 +90,23 @@ const HomeScreen = ({ navigation }: any) => {
         <SectionComponent>
           <RowComponent justify='space-between'>
             <Element4 size={24} color={colors.desc} />
+            <TouchableOpacity onPress={() => navigation.navigate('Notifications')}>
             <Notification size={24} color={colors.desc} />
+            </TouchableOpacity>
+            <View style={{
+              backgroundColor: 'red',
+              borderRadius: 100,
+              borderWidth: 2,
+              borderColor: colors.white,
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              height: 10,
+              width: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            />
 
             {/* <IonIcons name='notifications' size={24} color={colors.desc}/> */}
           </RowComponent>

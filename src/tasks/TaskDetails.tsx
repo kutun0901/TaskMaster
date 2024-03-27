@@ -18,6 +18,8 @@ import ButtonComponent from '../components/ButtonComponent'
 import UploadFileComponent from '../components/UploadFileComponent'
 import { calcFileSize } from '../utils/calculateFileSize'
 import AddSubTaskModal from '../modals/AddSubTaskModal'
+import auth from '@react-native-firebase/auth'
+import { HandleNotification } from '../utils/handleNotification'
 
 const TaskDetails = ({ navigation, route }: any) => {
 
@@ -30,6 +32,8 @@ const TaskDetails = ({ navigation, route }: any) => {
     const [isChanged, setIsChanged] = useState(false)
     const [isVisibleSubTaskModal, setIsVisibleSubTaskModal] = useState(false)
     const [isUrgent, setIsUrgent] = useState(false)
+
+    const user = auth().currentUser;
 
     useEffect(() => {
         getTaskDetails()
@@ -137,7 +141,7 @@ const TaskDetails = ({ navigation, route }: any) => {
                         .delete()
                         .then(() => {
                             taskDetail?.uids.forEach(id => {
-                                HandleNotification.SendNotification({
+                                HandleNotification.sendNotification({
                                     title: 'Delete task',
                                     body: `You task deleted by ${user?.email}`,
                                     taskId: '',

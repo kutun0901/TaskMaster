@@ -9,6 +9,7 @@ import LogInScreen from '../screens/auth/LogInScreen';
 import SignupScreen from '../screens/auth/SignupScreen';
 import TaskDetails from '../tasks/TaskDetails';
 import ListTasks from '../tasks/ListTasks';
+import Notifications from '../screens/Notifications';
 
 
 
@@ -38,6 +39,7 @@ const Router = () => {
       <Stack.Screen name='SearchScreen' component={SearchScreen} />
       <Stack.Screen name='TaskDetails' component={TaskDetails} />
       <Stack.Screen name='ListTasks' component={ListTasks} />
+      <Stack.Screen name='Notifications' component={Notifications} />
     </Stack.Navigator>
   )
 
