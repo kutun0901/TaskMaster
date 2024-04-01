@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity, FlatList } from 'react-native'
-import React, { useState } from 'react'
+import { TouchableOpacity, FlatList } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { NotificationModel } from '../models/NotificationModel'
 import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore'
@@ -13,6 +13,10 @@ const Notifications = ({navigation}: any) => {
   const [notifications, setNotifications] = useState<NotificationModel[]>([])
 
   const user = auth().currentUser;
+
+  useEffect(() => {
+    getNotifications();
+  }, []);
 
   const getNotifications = () => {
     const filter = firestore().collection('notifications')
